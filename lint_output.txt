@@ -1,0 +1,45 @@
+
+> restaurant-mgmt@0.1.0 lint
+> eslint
+
+
+/Users/lui/Desktop/Projects/Restaurant Management/next.config.ts
+  3:8  warning  'path' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/categories/page.tsx
+  70:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/customers/page.tsx
+   3:20  warning  'useMemo' is defined but never used          @typescript-eslint/no-unused-vars
+   5:43  warning  'Star' is defined but never used             @typescript-eslint/no-unused-vars
+  32:11  warning  'orders' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/dashboard/page.tsx
+    6:42  warning  'Users' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+    7:62  warning  'Zap' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+    8:5   warning  'Clock' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  123:10  warning  'ProgressBar' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  172:11  warning  'topMaxQty' is assigned a value but never used                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  310:53  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  361:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/kitchen/page.tsx
+  108:53  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/menu/page.tsx
+    3:53  warning  'useRef' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+    5:39  warning  'Eye' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  135:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  195:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  253:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/(main)/reports/page.tsx
+   11:1   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/purity')
+  109:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/lui/Desktop/Projects/Restaurant Management/src/app/customer-menu/page.tsx
+  99:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+✖ 21 problems (0 errors, 21 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
