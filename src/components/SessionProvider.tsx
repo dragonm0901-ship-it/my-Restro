@@ -32,7 +32,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
             if (error) {
                 // Ignore PGRST116 (No rows found) or 42P01 (relation "profiles" does not exist)
-                if (error.code !== 'PGRST116' && error.code !== '42P01') {
+                const isCodeIgnored = error.code === 'PGRST116' || error.code === '42P01';
+                const isMessageIgnored = error.message?.includes('schema cache') || JSON.stringify(error).includes('schema cache');
+                
+                if (!isCodeIgnored && !isMessageIgnored) {
                     console.error("Error fetching profile:", error.message || error);
                 }
                 return;

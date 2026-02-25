@@ -77,7 +77,7 @@ export default function TransactionsPage() {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div className="rounded-xl p-3.5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                     <div className="flex items-center gap-1.5 mb-1">
                         <ArrowDownLeft className="w-3.5 h-3.5" weight="bold" style={{ color: 'var(--success)' }} />

@@ -44,6 +44,7 @@ export default function POSPage() {
     const [selectedTable] = useState<string>('Select Table');
     const [isMenuList, setIsMenuList] = useState(false); // Grid vs List view
 
+
     const filteredItems = menuItems.filter(item =>
         (activeCategory === 'All' || item.category === activeCategory) &&
         item.name.toLowerCase().includes(search.toLowerCase())
@@ -82,13 +83,13 @@ export default function POSPage() {
     const itemsForBOT = cart.filter(i => i.type === 'beverage').length;
 
     return (
-        <div className="flex h-[calc(100vh-100px)] overflow-hidden rounded-3xl" style={{ border: '1px solid var(--border)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+        <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-100px)] overflow-auto lg:overflow-hidden rounded-3xl" style={{ border: '1px solid var(--border)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
 
-            {/* LEFT: Menu Selection */}
-            <div className="flex-1 flex flex-col min-w-0" style={{ borderRight: '1px solid var(--border)' }}>
+            {/* TOP/LEFT: Menu Selection */}
+            <div className="flex-1 flex flex-col min-w-0 lg:overflow-hidden w-full" style={{ borderRight: 'none' }}>
                 {/* Header / Search */}
-                <div className="p-5" style={{ borderBottom: '1px solid var(--border)' }}>
-                    <div className="flex items-center gap-4 justify-between">
+                <div className="p-5 w-full min-w-0 shrink-0" style={{ borderBottom: '1px solid var(--border)' }}>
+                    <div className="flex items-center gap-4 justify-between w-full min-w-0">
                         <div className="relative flex-1 max-w-md">
                             <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             <input
@@ -111,7 +112,7 @@ export default function POSPage() {
                     </div>
 
                     {/* Categories Scroll */}
-                    <div className="flex items-center gap-2 mt-5 overflow-x-auto hide-scrollbar pb-1">
+                    <div className="flex items-center gap-2 mt-5 overflow-x-auto hide-scrollbar pb-1 w-full min-w-0">
                         {categories.map(cat => (
                             <button
                                 key={cat}
@@ -130,7 +131,7 @@ export default function POSPage() {
                 </div>
 
                 {/* Products Grid/List */}
-                <div className="flex-1 overflow-y-auto p-5 hide-scrollbar relative">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 hide-scrollbar relative w-full min-w-0">
                     {filteredItems.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center">
                             <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-4">
@@ -139,27 +140,27 @@ export default function POSPage() {
                             <p className="text-gray-500 font-medium font-sm">No items found.</p>
                         </div>
                     ) : (
-                        <div className={`grid gap-5 ${isMenuList ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-2 xl:grid-cols-3'}`}>
+                        <div className={`grid gap-4 sm:gap-5 ${isMenuList ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'}`}>
                             {filteredItems.map(item => (
                                 <motion.div
                                     layoutId={`item-${item.id}`}
                                     key={item.id}
                                     onClick={() => addToCart(item)}
-                                    className="group cursor-pointer rounded-2xl p-3 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.98]"
+                                    className={`group cursor-pointer rounded-2xl p-3 flex transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] ${isMenuList ? 'flex-row items-center gap-4' : 'flex-col justify-between'}`}
                                     style={{ background: 'var(--bg-primary)', border: '1px solid var(--border)' }}
                                 >
-                                    <div className={`w-full ${isMenuList ? 'h-24' : 'h-32'} rounded-xl bg-gray-200 overflow-hidden relative mb-3`}>
+                                    <div className={`${isMenuList ? 'w-24 h-24 shrink-0' : 'w-full h-32'} rounded-xl bg-gray-200 overflow-hidden relative ${!isMenuList ? 'mb-3' : ''}`}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                                         <div className="absolute top-2 right-2 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-2 py-1 rounded border border-white/20">
-                                            <span className="text-[10px] font-bold" style={{ color: 'var(--text-primary)' }}>Stock: {item.stock}</span>
+                                            <span className="text-[10px] font-bold text-black dark:text-white">Stock: {item.stock}</span>
                                         </div>
                                     </div>
-                                    <div className="px-1">
+                                    <div className={`px-1 flex flex-col ${isMenuList ? 'flex-1 min-w-0 justify-center' : ''}`}>
                                         <h3 className="text-sm font-bold truncate leading-tight mb-1" style={{ color: 'var(--text-primary)' }}>{item.name}</h3>
-                                        <div className="flex items-center justify-between mt-2">
+                                        <div className={`flex items-center justify-between mt-2 ${isMenuList ? 'pr-2' : ''}`}>
                                             <span className="text-sm font-bold" style={{ color: 'var(--text-secondary)' }}>NPR {item.price}</span>
-                                            <div className="w-8 h-8 rounded-full flex items-center justify-center shadow-sm" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center shadow-sm shrink-0" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
                                                 <Plus className="w-4 h-4" weight="bold" />
                                             </div>
                                         </div>
@@ -169,12 +170,14 @@ export default function POSPage() {
                         </div>
                     )}
                 </div>
+
             </div>
 
-            {/* RIGHT: Active Order Panel */}
-            <div className="w-full max-w-[400px] flex flex-col shrink-0 relative z-10 bg-gray-50 dark:bg-[#000000]">
+            {/* BOTTOM/RIGHT: Active Order Panel */}
+            <div className="w-full lg:max-w-[400px] flex flex-col shrink-0 bg-gray-50 dark:bg-[#000000] lg:border-l lg:border-(--border)" style={{ borderTop: '1px solid var(--border)' }}>
+
                 {/* Order Type Tabs */}
-                <div className="p-5 pb-0">
+                <div className="p-5 pb-0 w-full min-w-0 shrink-0">
                     <div className="flex items-center justify-between p-1 rounded-xl mb-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                         {[
                             { id: 'Dine-In', icon: Armchair },
@@ -184,7 +187,7 @@ export default function POSPage() {
                             <button
                                 key={type.id}
                                 onClick={() => setOrderType(type.id as OrderType)}
-                                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition-all relative"
+                                className="flex-1 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all relative"
                                 style={{
                                     color: orderType === type.id ? 'var(--accent-fg)' : 'var(--text-muted)',
                                 }}
@@ -218,7 +221,7 @@ export default function POSPage() {
                 </div>
 
                 {/* Cart Items */}
-                <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4 relative hide-scrollbar">
+                <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4 relative hide-scrollbar w-full min-w-0">
                     {cart.length === 0 ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-60">
                             <Receipt className="w-16 h-16 mb-4 text-gray-300 dark:text-gray-700" weight="thin" />
@@ -292,18 +295,18 @@ export default function POSPage() {
                         </div>
                     </div>
 
-                    <div className="flex gap-2">
-                        <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
-                            <ArrowsSplit className="w-5 h-5" />
-                            <span className="text-[10px] font-bold">Split</span>
+                    <div className="flex gap-1.5 sm:gap-2">
+                        <button className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                            <ArrowsSplit className="w-5 h-5 shrink-0" />
+                            <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Split</span>
                         </button>
-                        <button className="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
-                            <Printer className="w-5 h-5" />
-                            <span className="text-[10px] font-bold">Print KOT</span>
+                        <button className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                            <Printer className="w-5 h-5 shrink-0" />
+                            <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Print KOT</span>
                         </button>
-                        <button className="flex-2 flex items-center justify-center gap-2 py-3 rounded-xl shadow-lg transition-transform active:scale-[0.98]" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
-                            <span className="text-sm font-bold">Charge</span>
-                            <CheckCircle className="w-5 h-5" weight="bold" />
+                        <button className="flex-[1.5] sm:flex-2 min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl shadow-lg transition-transform active:scale-[0.98]" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
+                            <span className="text-xs sm:text-sm font-bold truncate px-1 max-w-full">Charge</span>
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" weight="bold" />
                         </button>
                     </div>
                 </div>

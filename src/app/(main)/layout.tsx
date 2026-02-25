@@ -32,14 +32,14 @@ export default function MainLayout({
     }, [restaurantId, fetchSubscription]);
 
     return (
-        <div className="flex min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+        <div className="flex min-h-screen max-w-[100vw] overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>
             <Sidebar />
 
-            <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${collapsed ? 'lg:ml-[60px]' : 'lg:ml-[230px]'}`}>
+            <div className={`flex-1 flex flex-col min-w-0 min-h-screen transition-all duration-300 ${collapsed ? 'lg:ml-[60px]' : 'lg:ml-[230px]'}`}>
                 <Header onCartToggle={() => setCartOpen(!cartOpen)} cartRef={cartRef} />
 
-                <div className="flex flex-1 relative">
-                    <main className="flex-1 p-3 lg:p-5 pb-20 lg:pb-5">
+                <div className="flex flex-1 relative min-w-0">
+                    <main className="flex-1 min-w-0 p-3 lg:p-5 pb-5 lg:pb-5">
                         {children}
                     </main>
 

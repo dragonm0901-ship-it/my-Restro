@@ -14,6 +14,7 @@ import { useCartStore } from '@/stores/useCartStore';
 import { useThemeStore } from '@/stores/useThemeStore';
 import { useRoleStore } from '@/stores/useRoleStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import { LogoIcon } from '@/components/Logo';
 
 /* eslint-disable react-hooks/purity */
@@ -30,6 +31,7 @@ export default function Header({ onCartToggle, cartRef }: HeaderProps) {
     const role = useRoleStore((s) => s.role);
     const userName = useRoleStore((s) => s.userName);
     const { notifications, markRead, markAllRead, getUnreadCount } = useNotificationStore();
+    const { toggleMobile } = useSidebarStore();
     const [showNotifs, setShowNotifs] = useState(false);
 
     const unreadCount = getUnreadCount(role || 'all');
@@ -52,11 +54,17 @@ export default function Header({ onCartToggle, cartRef }: HeaderProps) {
             <div className="flex items-center justify-between h-[56px] px-4 lg:px-5">
                 {/* Left */}
                 <div className="flex items-center gap-2.5 flex-1">
-                    {/* Mobile Logo */}
-                    <div className="lg:hidden flex items-center shrink-0 mr-1">
+                    {/* Mobile Menu & Logo */}
+                    <div className="lg:hidden flex items-center shrink-0 mr-1 gap-2">
                         <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'var(--accent)' }}>
                             <LogoIcon size={20} className="text-(--accent-fg)" />
                         </div>
+                        <button
+                            onClick={toggleMobile}
+                            className="p-1.5 rounded-lg text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg>
+                        </button>
                     </div>
                     {tableNumber && (
                         <div

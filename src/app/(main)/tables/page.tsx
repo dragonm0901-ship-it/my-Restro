@@ -73,7 +73,7 @@ export default function TablesPage() {
                     <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>Tables</h1>
                     <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Floor plan and live status of {tables.length} tables.</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     {(['vacant', 'occupied', 'needs_attention', 'reserved'] as TableStatus[]).map((s) => {
                         const cfg = statusConfig[s];
                         return (
@@ -94,7 +94,7 @@ export default function TablesPage() {
                         <p className="text-[9px] font-semibold uppercase tracking-widest mb-2 px-1" style={{ color: 'var(--text-muted)' }}>
                             {rowLabels[ri]} Section
                         </p>
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                             {row.map((table) => {
                                 const cfg = statusConfig[table.status];
                                 const order = tableOrder(table);

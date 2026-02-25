@@ -39,7 +39,11 @@ function BillingContent() {
         const fetchPlans = async () => {
             const { data, error } = await supabase.from('subscription_plans').select('*').order('price_npr', { ascending: true });
             if (data) setPlans(data);
-            if (error) console.error("Error fetching plans:", error);
+            if (error) {
+                if (error.code !== '42P01' && Object.keys(error).length > 0) {
+                    console.error("Error fetching plans:", error);
+                }
+            }
             setLoadingPlans(false);
         };
 
