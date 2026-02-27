@@ -37,7 +37,7 @@ export default function PricingPage() {
         },
         {
             id: 'enterprise',
-            name: 'Premium',
+            name: 'Enterprise',
             price: 2999, // NPR
             description: 'Complete suite for large or multi-branch',
             color: 'var(--text-primary)',
