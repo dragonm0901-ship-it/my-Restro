@@ -38,6 +38,12 @@
   color-scheme: dark;
 }
 
+.landing-root[data-theme="dark"] .cta-banner {
+  background: var(--bg-elevated);
+  --accent-fg: #FAFAFA;
+  --accent: #09090B;
+}
+
 /* ============ HERO ============ */
 .hero-clip-reveal {
   clip-path: inset(0 0 100% 0);

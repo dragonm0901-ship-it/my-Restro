@@ -79,11 +79,11 @@ export default function Gallery() {
                     display: 'inline-block',
                     padding: '6px 16px',
                     borderRadius: '100px',
-                    background: '#F4F4F5',
-                    border: '1px solid #E4E4E7',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border)',
                     fontSize: '13px',
                     fontWeight: 600,
-                    color: '#52525B',
+                    color: 'var(--text-secondary)',
                     marginBottom: '20px',
                     fontFamily: "'Inter', sans-serif",
                 }}>
@@ -95,7 +95,7 @@ export default function Gallery() {
                     fontSize: 'clamp(28px, 4vw, 48px)',
                     lineHeight: 1.1,
                     letterSpacing: '-0.02em',
-                    color: '#09090B',
+                    color: 'var(--text-primary)',
                     marginBottom: '16px',
                 }}>
                     Built for restaurants<br />that demand excellence
@@ -103,7 +103,7 @@ export default function Gallery() {
                 <p style={{
                     fontSize: '17px',
                     lineHeight: 1.6,
-                    color: '#71717A',
+                    color: 'var(--text-secondary)',
                     maxWidth: '480px',
                     margin: '0 auto',
                     fontFamily: "'Inter', sans-serif",

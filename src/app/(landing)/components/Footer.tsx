@@ -33,8 +33,8 @@ export default function Footer() {
     return (
         <footer style={{
             padding: '80px 24px 40px',
-            background: '#FFFFFF',
-            borderTop: '1px solid #E4E4E7',
+            background: 'var(--bg-secondary)',
+            borderTop: '1px solid var(--border)',
         }}>
             <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
                 {/* Top Section */}
@@ -60,15 +60,15 @@ export default function Footer() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                background: '#09090B',
+                                background: 'var(--text-primary)',
                             }}>
-                                <LogoIcon size={18} style={{ color: '#FFFFFF' }} />
+                                <LogoIcon size={18} style={{ color: 'var(--bg-primary)' }} />
                             </div>
                             <span style={{
                                 fontFamily: "'Outfit', sans-serif",
                                 fontWeight: 700,
                                 fontSize: '18px',
-                                color: '#09090B',
+                                color: 'var(--text-primary)',
                             }}>
                                 myRestro
                             </span>
@@ -76,7 +76,7 @@ export default function Footer() {
                         <p style={{
                             fontSize: '13px',
                             lineHeight: 1.6,
-                            color: '#A1A1AA',
+                            color: 'var(--text-muted)',
                             maxWidth: '240px',
                             fontFamily: "'Inter', sans-serif",
                         }}>
@@ -91,7 +91,7 @@ export default function Footer() {
                                 fontFamily: "'Inter', sans-serif",
                                 fontWeight: 700,
                                 fontSize: '13px',
-                                color: '#09090B',
+                                color: 'var(--text-primary)',
                                 marginBottom: '16px',
                                 textTransform: 'uppercase',
                                 letterSpacing: '0.05em',

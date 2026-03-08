@@ -95,7 +95,7 @@ export default function Hero() {
                             fontSize: 'clamp(40px, 5.5vw, 72px)',
                             lineHeight: 1.05,
                             letterSpacing: '-0.03em',
-                            color: '#09090B',
+                            color: 'var(--text-primary)',
                         }}>
                             {headlineWords.map((word, i) => (
                                 <span key={i} className="hero-word" style={{ marginRight: i < headlineWords.length - 1 ? '0.25em' : 0 }}>
@@ -111,7 +111,7 @@ export default function Hero() {
                         style={{
                             fontSize: '18px',
                             lineHeight: 1.6,
-                            color: '#71717A',
+                            color: 'var(--text-secondary)',
                             maxWidth: '460px',
                             marginBottom: '36px',
                             fontFamily: "'Inter', sans-serif",
@@ -140,7 +140,7 @@ export default function Hero() {
                         gap: '16px',
                         marginTop: '48px',
                         paddingTop: '32px',
-                        borderTop: '1px solid #E4E4E7',
+                        borderTop: '1px solid var(--border)',
                     }}>
                         {/* Avatar stack */}
                         <div style={{ display: 'flex', marginRight: '-4px' }}>
@@ -150,7 +150,7 @@ export default function Hero() {
                                     height: '36px',
                                     borderRadius: '50%',
                                     background: color,
-                                    border: '3px solid #FAFAFA',
+                                    border: '3px solid var(--bg-primary)',
                                     marginLeft: i > 0 ? '-10px' : 0,
                                     display: 'flex',
                                     alignItems: 'center',
@@ -163,10 +163,10 @@ export default function Hero() {
                             ))}
                         </div>
                         <div>
-                            <p style={{ fontSize: '14px', fontWeight: 700, color: '#09090B', fontFamily: "'Inter', sans-serif" }}>
+                            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>
                                 200+ restaurants
                             </p>
-                            <p style={{ fontSize: '12px', color: '#A1A1AA', fontFamily: "'Inter', sans-serif" }}>
+                            <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: "'Inter', sans-serif" }}>
                                 already managing digitally
                             </p>
                         </div>
@@ -179,8 +179,9 @@ export default function Hero() {
                         position: 'relative',
                         borderRadius: '300px 300px 24px 24px',
                         overflow: 'hidden',
-                        boxShadow: '0 40px 80px -20px rgba(0,0,0,0.12)',
-                        border: '1px solid #E4E4E7',
+                        boxShadow: 'var(--shadow-card)',
+                        border: '1px solid var(--border)',
+                        background: 'var(--bg-secondary)',
                         aspectRatio: '4/5',
                     }}>
                         <Image
@@ -200,11 +201,11 @@ export default function Hero() {
                         position: 'absolute',
                         bottom: '-20px',
                         left: '-20px',
-                        background: '#FFFFFF',
+                        background: 'var(--bg-card)',
                         borderRadius: '16px',
                         padding: '16px 20px',
-                        boxShadow: '0 8px 32px -8px rgba(0,0,0,0.12)',
-                        border: '1px solid #E4E4E7',
+                        boxShadow: 'var(--shadow-card)',
+                        border: '1px solid var(--border)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '12px',
@@ -213,15 +214,15 @@ export default function Hero() {
                             width: '40px',
                             height: '40px',
                             borderRadius: '12px',
-                            background: '#F4F4F5',
+                            background: 'var(--bg-elevated)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <ChartBar size={20} weight="bold" style={{ color: '#09090B' }} />
+                            <ChartBar size={20} weight="bold" style={{ color: 'var(--text-primary)' }} />
                         </div>
                         <div>
-                            <p style={{ fontSize: '13px', fontWeight: 700, color: '#09090B', fontFamily: "'Inter', sans-serif" }}>Orders Today</p>
+                            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>Orders Today</p>
                             <p style={{ fontSize: '18px', fontWeight: 800, color: '#10B981', fontFamily: "'Outfit', sans-serif" }}>+127</p>
                         </div>
                     </div>
@@ -231,17 +232,17 @@ export default function Hero() {
                         position: 'absolute',
                         top: '-16px',
                         right: '-16px',
-                        background: '#FFFFFF',
+                        background: 'var(--bg-card)',
                         borderRadius: '14px',
                         padding: '14px 18px',
-                        boxShadow: '0 8px 32px -8px rgba(0,0,0,0.12)',
-                        border: '1px solid #E4E4E7',
+                        boxShadow: 'var(--shadow-card)',
+                        border: '1px solid var(--border)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '10px',
                     }}>
-                        <Lightning size={18} weight="bold" style={{ color: '#09090B' }} />
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#09090B', fontFamily: "'Inter', sans-serif" }}>
+                        <Lightning size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />
+                        <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>
                             Real-time KDS
                         </span>
                     </div>

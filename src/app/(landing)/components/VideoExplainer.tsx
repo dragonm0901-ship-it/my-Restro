@@ -4,12 +4,12 @@ import { Play } from '@phosphor-icons/react';
 
 export default function VideoExplainer() {
     return (
-        <section className="py-24 relative overflow-hidden" style={{ background: '#FAFAFA' }}>
+        <section className="py-24 relative overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
             <div className="max-w-6xl mx-auto px-6 relative z-10 text-center">
-                <h2 className="text-3xl md:text-5xl font-black font-['Outfit'] mb-6 tracking-tight" style={{ color: '#09090B' }}>
+                <h2 className="text-3xl md:text-5xl font-black font-['Outfit'] mb-6 tracking-tight" style={{ color: 'var(--text-primary)' }}>
                     See It In Action
                 </h2>
-                <p className="text-lg max-w-2xl mx-auto font-['Inter'] mb-12" style={{ color: '#52525B' }}>
+                <p className="text-lg max-w-2xl mx-auto font-['Inter'] mb-12" style={{ color: 'var(--text-secondary)' }}>
                     Watch how myRestro synchronizes the entire dining experience from the moment a guest sits down to when the food arrives.
                 </p>
 
