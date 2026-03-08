@@ -77,16 +77,19 @@ export default function PricingPage() {
                 <div className="flex items-center gap-3">
                     <span className={`text-sm font-semibold transition-colors ${billingCycle === 'monthly' ? '' : 'opacity-50'}`} style={{ color: 'var(--text-primary)' }}>Monthly</span>
                     <div
-                        className="relative w-12 h-6 rounded-full cursor-pointer transition-colors border border-gray-200 dark:border-zinc-700"
-                        style={{ background: billingCycle === 'yearly' ? 'var(--accent)' : 'var(--bg-elevated)' }}
+                        className="relative w-12 h-6 rounded-full cursor-pointer transition-colors border"
+                        style={{ 
+                            background: billingCycle === 'yearly' ? 'var(--text-primary)' : 'var(--bg-elevated)',
+                            borderColor: billingCycle === 'yearly' ? 'var(--text-primary)' : 'var(--border)'
+                        }}
                         onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
                     >
                         <motion.div
-                            className="absolute top-1 w-3.5 h-3.5 rounded-full shadow-sm bg-gray-500 dark:bg-white"
+                            className="absolute top-1 w-4 h-4 rounded-full shadow-sm"
                             style={{ 
-                                background: billingCycle === 'yearly' ? '#ffffff' : undefined,
+                                background: billingCycle === 'yearly' ? 'var(--bg-primary)' : 'var(--text-secondary)',
                             }}
-                            animate={{ left: billingCycle === 'yearly' ? 28 : 5 }}
+                            animate={{ left: billingCycle === 'yearly' ? 26 : 4 }}
                             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                         />
                     </div>
