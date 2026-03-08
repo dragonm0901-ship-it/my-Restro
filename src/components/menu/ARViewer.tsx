@@ -20,7 +20,16 @@ interface ARViewerProps {
 
 export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemDescription }: ARViewerProps) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [absoluteSrc, setAbsoluteSrc] = useState(modelSrc);
     const modelRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        if (modelSrc.startsWith('/')) {
+            setAbsoluteSrc(window.location.origin + modelSrc);
+        } else {
+            setAbsoluteSrc(modelSrc);
+        }
+    }, [modelSrc]);
 
     // Properly listen for model-viewer custom 'load' event
     useEffect(() => {
@@ -90,7 +99,7 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                                 {/* @ts-ignore - model-viewer is a custom element */}
                                 <model-viewer
                                     ref={modelRef}
-                                    src={modelSrc}
+                                    src={absoluteSrc}
                                     alt={`A 3D model of ${itemName}`}
                                     shadow-intensity="1"
                                     camera-controls
