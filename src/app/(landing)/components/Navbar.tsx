@@ -3,25 +3,70 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LogoIcon } from '@/components/Logo';
-import { Sun, Moon } from '@phosphor-icons/react';
+import { Sun, Moon, Monitor } from '@phosphor-icons/react';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    type ThemeMode = 'light' | 'dark' | 'system';
+    const [theme, setTheme] = useState<ThemeMode>('system');
     const [isDark, setIsDark] = useState(false);
 
+    // Initialize theme from localStorage and system preference
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 20);
-        window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
+        const savedTheme = localStorage.getItem('myRestro-theme') as ThemeMode || 'system';
+        setTheme(savedTheme);
+        
+        const applyTheme = (mode: ThemeMode) => {
+            const root = document.querySelector('.landing-root');
+            if (!root) return;
+            
+            let isDarkMode = false;
+            if (mode === 'system') {
+                isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else {
+                isDarkMode = mode === 'dark';
+            }
+            
+            root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            setIsDark(isDarkMode);
+        };
+
+        applyTheme(savedTheme);
+
+        // Listen for system theme changes if using 'system'
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+             if (localStorage.getItem('myRestro-theme') === 'system' || !localStorage.getItem('myRestro-theme')) {
+                 applyTheme('system');
+             }
+        };
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
     }, []);
 
     const toggleTheme = () => {
+        const nextTheme: Record<ThemeMode, ThemeMode> = {
+            'system': 'light',
+            'light': 'dark',
+            'dark': 'system'
+        };
+        const newTheme = nextTheme[theme];
+        setTheme(newTheme);
+        localStorage.setItem('myRestro-theme', newTheme);
+        
         const root = document.querySelector('.landing-root');
         if (!root) return;
-        const newTheme = isDark ? 'light' : 'dark';
-        root.setAttribute('data-theme', newTheme);
-        setIsDark(!isDark);
+        
+        let isDarkMode = false;
+        if (newTheme === 'system') {
+            isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        } else {
+            isDarkMode = newTheme === 'dark';
+        }
+        
+        root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        setIsDark(isDarkMode);
     };
 
     const navLinks = [
@@ -117,19 +162,31 @@ export default function Navbar() {
                             e.currentTarget.style.borderColor = 'var(--border)';
                         }}
                     >
+                        {/* Monitor (System) Icon */}
                         <div style={{
                             position: 'absolute',
                             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            transform: isDark ? 'translateY(-40px) rotate(-90deg) scale(0)' : 'translateY(0) rotate(0deg) scale(1)',
-                            opacity: isDark ? 0 : 1,
+                            transform: theme === 'system' ? 'translateY(0) scale(1)' : 'translateY(-40px) scale(0)',
+                            opacity: theme === 'system' ? 1 : 0,
+                        }}>
+                            <Monitor size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />
+                        </div>
+                        {/* Moon (Dark) Icon */}
+                        <div style={{
+                            position: 'absolute',
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            transform: theme === 'dark' ? 'translateY(0) scale(1)' : 
+                                     theme === 'system' ? 'translateY(40px) scale(0)' : 'translateY(-40px) scale(0)',
+                            opacity: theme === 'dark' ? 1 : 0,
                         }}>
                             <Moon size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />
                         </div>
+                        {/* Sun (Light) Icon */}
                         <div style={{
                             position: 'absolute',
                             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            transform: isDark ? 'translateY(0) rotate(0deg) scale(1)' : 'translateY(40px) rotate(90deg) scale(0)',
-                            opacity: isDark ? 1 : 0,
+                            transform: theme === 'light' ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0)',
+                            opacity: theme === 'light' ? 1 : 0,
                         }}>
                             <Sun size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />
                         </div>
@@ -237,7 +294,9 @@ export default function Navbar() {
                             background: 'var(--bg-elevated)', border: '1px solid var(--border)',
                             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
-                            {isDark ? <Sun size={18} weight="bold" style={{ color: 'var(--text-primary)' }} /> : <Moon size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />}
+                            {theme === 'system' ? <Monitor size={18} weight="bold" style={{ color: 'var(--text-primary)' }} /> : 
+                             theme === 'dark' ? <Moon size={18} weight="bold" style={{ color: 'var(--text-primary)' }} /> : 
+                             <Sun size={18} weight="bold" style={{ color: 'var(--text-primary)' }} />}
                         </button>
                         <Link
                             href="/login"
