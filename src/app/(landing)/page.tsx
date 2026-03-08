@@ -9,7 +9,7 @@ import CTABanner from './components/CTABanner';
 import Footer from './components/Footer';
 import InteractiveDemo from './components/InteractiveDemo';
 import ROICalculator from './components/ROICalculator';
-import IntegrationsGrid from './components/IntegrationsGrid';
+
 import UseCaseTabs from './components/UseCaseTabs';
 import VideoExplainer from './components/VideoExplainer';
 
@@ -22,7 +22,7 @@ export default function LandingPage() {
                 <ROICalculator />
                 <Features />
                 <HowItWorks />
-                <IntegrationsGrid />
+
                 <Gallery />
                 <InteractiveDemo />
                 <Testimonials />
