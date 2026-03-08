@@ -44,7 +44,7 @@ const testimonials = [
 ];
 
 // Helper to check if text is long enough to need truncation
-const useIsTextTruncated = (text: string, limit: number = 100) => {
+const isTextTruncated = (text: string, limit: number = 100) => {
     return text.length > limit;
 };
 
@@ -78,7 +78,7 @@ export default function Testimonials() {
                 {/* CSS Grid for uniform boxes */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {testimonials.map((t, i) => {
-                        const isLong = useIsTextTruncated(t.content);
+                        const isLong = isTextTruncated(t.content);
                         
                         return (
                             <motion.div 
@@ -107,7 +107,7 @@ export default function Testimonials() {
                                     </span>
                                 </div>
                                 
-                                <div className="flex-grow">
+                                <div className="grow">
                                     <p className={`text-base leading-relaxed mb-4 font-['Inter'] ${isLong ? 'line-clamp-3' : ''}`} style={{ color: 'var(--text-secondary)' }}>
                                         &ldquo;{t.content}&rdquo;
                                     </p>
@@ -138,7 +138,7 @@ export default function Testimonials() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md"
+                        className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md"
                         onClick={() => setSelectedTestimonial(null)}
                     >
                         <motion.div

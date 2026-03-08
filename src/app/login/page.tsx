@@ -321,10 +321,11 @@ export default function LoginPage() {
                                                     // For demo chef/waiter, try to link them to an existing demo restaurant
                                                     const { data: demoRestro } = await supabase.from('restaurants').select('id').ilike('name', 'Demo Restaurant').limit(1).maybeSingle();
                                                     if (demoRestro) {
+                                                        const dbRole = r === 'chef' ? 'kitchen' : (r === 'waiter' ? 'staff' : 'admin');
                                                         await supabase.from('profiles').insert({
                                                             id: signUpError ? undefined : (await supabase.auth.getUser()).data.user?.id,
                                                             restaurant_id: demoRestro.id,
-                                                            role: r,
+                                                            role: dbRole,
                                                             full_name: `Demo ${r}`
                                                         });
                                                     }
@@ -335,11 +336,29 @@ export default function LoginPage() {
                                             }
                                             if (error) throw error;
 
-                                            const { data: profile } = await supabase
+                                            let { data: profile } = await supabase
                                                 .from('profiles')
-                                                .select('restaurant_id')
+                                                .select('restaurant_id, role')
                                                 .eq('id', data.user?.id)
                                                 .maybeSingle();
+
+                                            // Auto-repair demo profiles if the postgres trigger gave them 'admin' or null restaurant_id
+                                            const expectedDbRole = r === 'chef' ? 'kitchen' : (r === 'waiter' ? 'staff' : 'admin');
+                                            if ((!profile || profile.role !== expectedDbRole || !profile.restaurant_id) && r !== 'owner') {
+                                                const { data: demoRestro } = await supabase.from('restaurants').select('id').ilike('name', 'Demo Restaurant').limit(1).maybeSingle();
+                                                if (demoRestro) {
+                                                    const { error: updateErr } = await supabase.from('profiles').update({
+                                                        restaurant_id: demoRestro.id,
+                                                        role: expectedDbRole,
+                                                        full_name: `Demo ${r}`
+                                                    }).eq('id', data.user?.id);
+                                                    
+                                                    if (updateErr) console.error("Profile update failed:", updateErr);
+                                                    
+                                                    const { data: newProfile } = await supabase.from('profiles').select('restaurant_id, role').eq('id', data.user?.id).maybeSingle();
+                                                    profile = newProfile;
+                                                }
+                                            }
 
                                             setRole(r, data.user?.user_metadata?.full_name, profile?.restaurant_id);
                                             toast.success(`Logged in as Demo ${r}`);

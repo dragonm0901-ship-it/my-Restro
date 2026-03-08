@@ -80,9 +80,11 @@ export async function proxy(request: NextRequest) {
             .single();
 
         const role = profile?.role;
+        const isDemoChef = user.email === 'demo.chef@example.com';
+        
         // Only admins can access settings
         if (url.pathname.startsWith('/settings') && role !== 'admin') {
-            url.pathname = role === 'kitchen' ? '/kds' : '/tables';
+            url.pathname = (role === 'kitchen' || role === 'chef' || isDemoChef) ? '/kds' : '/tables';
             return NextResponse.redirect(url);
         }
     }
@@ -93,8 +95,12 @@ export async function proxy(request: NextRequest) {
             url.pathname = '/login';
             return NextResponse.redirect(url);
         }
+
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-        if (profile?.role !== 'admin' && profile?.role !== 'kitchen') {
+        const role = profile?.role;
+        const isDemoChef = user.email === 'demo.chef@example.com';
+        
+        if (!isDemoChef && role !== 'admin' && role !== 'owner' && role !== 'kitchen' && role !== 'chef') {
             url.pathname = '/tables';
             return NextResponse.redirect(url);
         }

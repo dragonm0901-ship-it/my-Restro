@@ -10,11 +10,16 @@ export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     type ThemeMode = 'light' | 'dark' | 'system';
     const [theme, setTheme] = useState<ThemeMode>('system');
-    const [isDark, setIsDark] = useState(false);
 
     // Initialize theme from localStorage and system preference
     useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        
         const savedTheme = localStorage.getItem('myRestro-theme') as ThemeMode || 'system';
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTheme(savedTheme);
         
         const applyTheme = (mode: ThemeMode) => {
@@ -29,7 +34,6 @@ export default function Navbar() {
             }
             
             root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-            setIsDark(isDarkMode);
         };
 
         applyTheme(savedTheme);
@@ -42,7 +46,10 @@ export default function Navbar() {
              }
         };
         mediaQuery.addEventListener('change', handleChange);
-        return () => mediaQuery.removeEventListener('change', handleChange);
+        return () => {
+            mediaQuery.removeEventListener('change', handleChange);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     const toggleTheme = () => {
@@ -66,7 +73,6 @@ export default function Navbar() {
         }
         
         root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-        setIsDark(isDarkMode);
     };
 
     const navLinks = [
