@@ -173,7 +173,7 @@ export default function CustomerMenuPage() {
                 <ARViewer 
                     isOpen={!!arItem}
                     onClose={() => setArItem(null)}
-                    modelSrc="https://modelviewer.dev/shared-assets/models/Astronaut.glb" // Astronaut placeholder until the user updates to Pizza
+                    modelSrc="/pizza.glb"
                     itemName={arItem.name}
                     itemPrice={arItem.price}
                     itemDescription={arItem.description}

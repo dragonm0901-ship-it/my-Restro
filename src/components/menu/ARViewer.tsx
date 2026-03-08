@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CubeFocus } from '@phosphor-icons/react/dist/ssr';
 
@@ -20,6 +20,20 @@ interface ARViewerProps {
 
 export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemDescription }: ARViewerProps) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const modelRef = useRef<HTMLElement>(null);
+
+    // Properly listen for model-viewer custom 'load' event
+    useEffect(() => {
+        const mv = modelRef.current;
+        if (!mv) return;
+
+        const handleLoad = () => setIsLoaded(true);
+        mv.addEventListener('load', handleLoad);
+
+        return () => {
+            mv.removeEventListener('load', handleLoad);
+        };
+    }, [isOpen]);
 
     // Prevent body scroll when modal is open
     useEffect(() => {
@@ -75,8 +89,8 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                             <div className="w-full h-full relative z-10">
                                 {/* @ts-ignore - model-viewer is a custom element */}
                                 <model-viewer
+                                    ref={modelRef}
                                     src={modelSrc}
-                                    ios-src=""
                                     alt={`A 3D model of ${itemName}`}
                                     shadow-intensity="1"
                                     camera-controls
@@ -84,7 +98,6 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                                     ar
                                     ar-modes="webxr scene-viewer quick-look"
                                     environment-image="neutral"
-                                    onLoad={() => setIsLoaded(true)}
                                     style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
                                 >
                                     {/* AR Button styling overrides inside model-viewer slotted content */}

@@ -67,11 +67,11 @@ export default function QRMenuBuilderPage() {
                     <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>QR Menu Builder</h1>
                     <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Design your customer-facing digital menu and generate table-specific QR codes.</p>
                 </div>
-                <div className="flex bg-gray-100 dark:bg-zinc-900 p-1 rounded-xl">
-                    <button onClick={() => setActiveTab('design')} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'design' ? 'bg-white dark:bg-black shadow-sm text-black dark:text-white' : 'text-gray-500'}`}>
+                <div className="flex p-1 rounded-xl" style={{ background: 'var(--bg-input)' }}>
+                    <button onClick={() => setActiveTab('design')} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'design' ? 'shadow-sm' : 'opacity-70'}`} style={activeTab === 'design' ? { background: 'var(--text-primary)', color: 'var(--bg-primary)' } : { color: 'var(--text-secondary)' }}>
                         <Palette className="w-4 h-4" /> Design Menu
                     </button>
-                    <button onClick={() => setActiveTab('preview')} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'preview' ? 'bg-white dark:bg-black shadow-sm text-black dark:text-white' : 'text-gray-500'}`}>
+                    <button onClick={() => setActiveTab('preview')} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'preview' ? 'shadow-sm' : 'opacity-70'}`} style={activeTab === 'preview' ? { background: 'var(--text-primary)', color: 'var(--bg-primary)' } : { color: 'var(--text-secondary)' }}>
                         <Eye className="w-4 h-4" /> Live Preview
                     </button>
                 </div>
@@ -100,7 +100,7 @@ export default function QRMenuBuilderPage() {
 
                             <div>
                                 <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>Restaurant Logo (Placeholder)</label>
-                                <div className="border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors" style={{ borderColor: 'var(--border)' }}>
+                                <div className="border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:opacity-80 transition-colors" style={{ borderColor: 'var(--border)' }}>
                                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: primaryColor }}>
                                         <span className="text-white text-xs font-bold font-['Outfit']">mR</span>
                                     </div>
@@ -126,7 +126,7 @@ export default function QRMenuBuilderPage() {
                                         type="text"
                                         value={tableNumber}
                                         onChange={(e) => setTableNumber(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm font-bold border outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-shadow"
+                                        className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm font-bold border outline-none focus:border-gray-500 transition-shadow"
                                         style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
                                     />
                                 </div>
@@ -153,8 +153,8 @@ export default function QRMenuBuilderPage() {
                             <div className="flex gap-2">
                                 <button 
                                     onClick={handleCopyLink}
-                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-colors bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-sm" 
-                                    style={{ color: 'var(--text-primary)' }}
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-colors hover:opacity-80 font-bold text-sm"
+                                    style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
                                 >
                                     <LinkIcon className="w-4 h-4" /> Copy Link
                                 </button>
@@ -171,10 +171,10 @@ export default function QRMenuBuilderPage() {
                 </div>
 
                 {/* Mobile Phone Preview Panel */}
-                <div className="lg:col-span-2 bg-gray-100 dark:bg-zinc-900 rounded-3xl p-8 flex items-center justify-center overflow-hidden border" style={{ borderColor: 'var(--border)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.05)' }}>
-                    <div className="relative w-[320px] h-[650px] bg-white rounded-[40px] shadow-2xl overflow-hidden border-8 border-zinc-200 dark:border-zinc-800 shrink-0">
+                <div className="lg:col-span-2 rounded-3xl p-8 flex items-center justify-center overflow-hidden border" style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.05)' }}>
+                    <div className="relative w-[320px] h-[650px] bg-white rounded-[40px] shadow-2xl overflow-hidden border-8 shrink-0" style={{ borderColor: 'var(--border)' }}>
                         {/* iPhone Notch */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-zinc-200 dark:bg-zinc-800 rounded-b-2xl z-20" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 rounded-b-2xl z-20" style={{ background: 'var(--border)' }} />
 
                         {/* Live CSS Preview App */}
                         <div className="w-full h-full overflow-y-auto hide-scrollbar bg-gray-50 relative pb-20">

@@ -162,15 +162,17 @@ export default function POSPage() {
                                 placeholder="Search menu items..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium outline-none transition-shadow focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium outline-none transition-shadow focus:ring-1 focus:ring-gray-400"
                                 style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
                             />
                         </div>
                         <div className="flex items-center gap-2">
-                            <button onClick={() => setIsMenuList(false)} className={`p-2.5 rounded-lg transition-colors ${!isMenuList ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800'}`}>
+                            <button onClick={() => setIsMenuList(false)} className="p-2.5 rounded-lg transition-colors" 
+                                style={{ background: !isMenuList ? 'var(--text-primary)' : 'transparent', color: !isMenuList ? 'var(--bg-primary)' : 'var(--text-muted)' }}>
                                 <GridFour className="w-5 h-5" weight={!isMenuList ? 'fill' : 'regular'} />
                             </button>
-                            <button onClick={() => setIsMenuList(true)} className={`p-2.5 rounded-lg transition-colors ${isMenuList ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800'}`}>
+                            <button onClick={() => setIsMenuList(true)} className="p-2.5 rounded-lg transition-colors"
+                                style={{ background: isMenuList ? 'var(--text-primary)' : 'transparent', color: isMenuList ? 'var(--bg-primary)' : 'var(--text-muted)' }}>
                                 <List className="w-5 h-5" weight={isMenuList ? 'bold' : 'regular'} />
                             </button>
                         </div>
@@ -210,7 +212,7 @@ export default function POSPage() {
                 <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 hide-scrollbar relative w-full min-w-0">
                     {filteredItems.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center">
-                            <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'var(--bg-card)' }}>
                                 <span className="text-2xl opacity-50">🍽️</span>
                             </div>
                             <p className="text-gray-500 font-medium font-sm">No items found.</p>
@@ -230,12 +232,12 @@ export default function POSPage() {
                                             /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-800">
+                                            <div className="w-full h-full flex items-center justify-center" style={{ background: 'var(--bg-elevated)' }}>
                                                 <span className="text-2xl opacity-30">🍽️</span>
                                             </div>
                                         )}
-                                        <div className="absolute top-2 right-2 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-2 py-1 rounded border border-white/20">
-                                            <span className="text-[10px] font-bold text-black dark:text-white">Stock: {item.stock}</span>
+                                        <div className="absolute top-2 right-2 backdrop-blur-sm px-2 py-1 rounded border border-white/10" style={{ background: 'var(--bg-card)' }}>
+                                            <span className="text-[10px] font-bold" style={{ color: 'var(--text-primary)' }}>Stock: {item.stock}</span>
                                         </div>
                                     </div>
                                     <div className={`px-1 flex flex-col ${isMenuList ? 'flex-1 min-w-0 justify-center' : ''}`}>
@@ -256,7 +258,7 @@ export default function POSPage() {
             </div>
 
             {/* BOTTOM/RIGHT: Active Order Panel */}
-            <div className="w-full lg:max-w-[400px] flex flex-col shrink-0 bg-gray-50 dark:bg-[#000000] lg:border-l lg:border-(--border)" style={{ borderTop: '1px solid var(--border)' }}>
+            <div className="w-full lg:max-w-[400px] flex flex-col shrink-0 lg:border-l" style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-secondary)', borderLeftColor: 'var(--border)' }}>
 
                 {/* Order Type Tabs */}
                 <div className="p-5 pb-0 w-full min-w-0 shrink-0">
@@ -285,7 +287,7 @@ export default function POSPage() {
 
                     {/* Meta Selectors */}
                     <div className="flex items-center gap-3">
-                        <button className="flex-1 flex items-center justify-between p-3 rounded-xl border border-dashed transition-colors hover:border-black dark:hover:border-white" style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}>
+                        <button className="flex-1 flex items-center justify-between p-3 rounded-xl border border-dashed transition-colors hover:opacity-80" style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}>
                             <div className="flex items-center gap-2">
                                 <User className="w-4 h-4 text-gray-400" />
                                 <span className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>Walk-in Client</span>
@@ -294,7 +296,7 @@ export default function POSPage() {
                         </button>
 
                         {orderType === 'Dine-In' && (
-                            <button className="flex-1 flex items-center justify-between p-3 rounded-xl border transition-colors hover:border-black dark:hover:border-white shadow-sm" style={{ borderColor: 'var(--border)', background: 'var(--accent)', color: 'var(--accent-fg)' }}>
+                            <button className="flex-1 flex items-center justify-between p-3 rounded-xl border transition-colors shadow-sm hover:opacity-80" style={{ borderColor: 'var(--border)', background: 'var(--accent)', color: 'var(--accent-fg)' }}>
                                 <span className="text-xs font-bold">{selectedTable}</span>
                                 <CaretDown className="w-3 h-3 opacity-60" strokeWidth={3} />
                             </button>
@@ -306,7 +308,7 @@ export default function POSPage() {
                 <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4 relative hide-scrollbar w-full min-w-0">
                     {cart.length === 0 ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-60">
-                            <Receipt className="w-16 h-16 mb-4 text-gray-300 dark:text-gray-700" weight="thin" />
+                            <Receipt className="w-16 h-16 mb-4 text-gray-400" weight="thin" />
                             <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Cart is empty. Add items to start a new order.</p>
                         </div>
                     ) : (
@@ -325,11 +327,11 @@ export default function POSPage() {
                                         <p className="text-[11px] font-bold" style={{ color: 'var(--text-muted)' }}>NPR {item.price}</p>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <button onClick={() => updateQuantity(item.id, -1)} className="w-7 h-7 rounded-sm flex items-center justify-center transition-colors bg-white border dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-500 hover:text-black dark:hover:text-white">
+                                        <button onClick={() => updateQuantity(item.id, -1)} className="w-7 h-7 rounded-sm flex items-center justify-center transition-colors hover:opacity-80" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
                                             <Minus className="w-3 h-3 w-bold" />
                                         </button>
                                         <span className="w-5 text-center text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 rounded-sm flex items-center justify-center transition-colors bg-white border dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-500 hover:text-black dark:hover:text-white">
+                                        <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 rounded-sm flex items-center justify-center transition-colors hover:opacity-80" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
                                             <Plus className="w-3 h-3 w-bold" />
                                         </button>
                                         <button onClick={() => removeItem(item.id)} className="w-7 h-7 rounded-md flex items-center justify-center ml-1 text-red-400 hover:bg-red-50 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
@@ -343,15 +345,15 @@ export default function POSPage() {
                 </div>
 
                 {/* Footer / Checkout Box */}
-                <div className="p-5 pt-6 bg-white dark:bg-[#09090B]" style={{ borderTop: '1px solid var(--border)' }}>
+                <div className="p-5 pt-6" style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border)' }}>
 
                     {/* Routing Indicators (KOT/BOT) */}
                     {cart.length > 0 && (
-                        <div className="flex items-center justify-between mb-4 pb-4 border-b border-dashed border-gray-200 dark:border-zinc-800">
+                        <div className="flex items-center justify-between mb-4 pb-4 border-b border-dashed" style={{ borderBottomColor: 'var(--border)' }}>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Routing</span>
                             <div className="flex gap-2 text-[10px] font-bold">
-                                {itemsForKOT > 0 && <span className="px-2 py-1 bg-gray-100 dark:bg-zinc-800 rounded-md text-black dark:text-white">KOT ({itemsForKOT})</span>}
-                                {itemsForBOT > 0 && <span className="px-2 py-1 bg-gray-100 dark:bg-zinc-800 rounded-md text-black dark:text-white">BOT ({itemsForBOT})</span>}
+                                {itemsForKOT > 0 && <span className="px-2 py-1 rounded-md" style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>KOT ({itemsForKOT})</span>}
+                                {itemsForBOT > 0 && <span className="px-2 py-1 rounded-md" style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}>BOT ({itemsForBOT})</span>}
                             </div>
                         </div>
                     )}
@@ -378,11 +380,11 @@ export default function POSPage() {
                     </div>
 
                     <div className="flex gap-1.5 sm:gap-2">
-                        <button className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                        <button className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border hover:opacity-80 transition-colors" style={{ borderColor: 'var(--border)', background: 'var(--bg-card)', color: 'var(--text-secondary)' }}>
                             <ArrowsSplit className="w-5 h-5 shrink-0" />
                             <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Split</span>
                         </button>
-                        <button onClick={handlePrintKOT} className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                        <button onClick={handlePrintKOT} className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border hover:opacity-80 transition-colors" style={{ borderColor: 'var(--border)', background: 'var(--bg-card)', color: 'var(--text-secondary)' }}>
                             <Printer className="w-5 h-5 shrink-0" />
                             <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Print KOT</span>
                         </button>

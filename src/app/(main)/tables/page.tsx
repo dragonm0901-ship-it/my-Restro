@@ -322,7 +322,7 @@ export default function TablesPage() {
             <AnimatePresence>
                 {showQR && selectedTable && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+                        className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 backdrop-blur-sm"
                         onClick={() => setShowQR(false)}>
                         <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
                             className="rounded-2xl p-6 text-center max-w-sm w-full mx-4"
