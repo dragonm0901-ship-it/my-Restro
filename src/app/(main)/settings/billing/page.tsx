@@ -151,8 +151,22 @@ function BillingContent() {
             <p className="mb-8" style={{ color: 'var(--text-muted)' }}>Choose the best plan for your restaurant layout and staff size.</p>
 
             {loadingPlans ? (
-                <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin h-10 w-10" style={{ color: 'var(--accent)' }} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="border rounded-2xl p-6 flex flex-col h-[400px]" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
+                            <div className="skeleton h-8 w-2/3 mb-2" />
+                            <div className="skeleton h-4 w-full mb-4" />
+                            <div className="mb-6 border-b pb-6" style={{ borderColor: 'var(--border)' }}>
+                                <div className="skeleton h-10 w-3/4 mb-2" />
+                                <div className="skeleton h-4 w-1/2" />
+                            </div>
+                            <div className="space-y-4 mb-8 flex-1">
+                                <div className="skeleton h-5 w-full" />
+                                <div className="skeleton h-5 w-5/6" />
+                            </div>
+                            <div className="skeleton h-12 w-full rounded-xl mt-auto" />
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

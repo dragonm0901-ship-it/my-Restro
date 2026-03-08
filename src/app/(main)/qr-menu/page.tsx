@@ -1,12 +1,64 @@
 'use client';
 
-import { useState } from 'react';
-import { QrCode, Link as LinkIcon, DownloadSimple, Palette, Eye, Hash, PaintBrush } from '@phosphor-icons/react';
+import { useState, useRef, useEffect } from 'react';
+import { QrCode, Link as LinkIcon, DownloadSimple, Palette, Eye, Hash, PaintBrush } from '@phosphor-icons/react/dist/ssr';
+import { QRCodeCanvas } from 'qrcode.react';
+import toast from 'react-hot-toast';
 
 export default function QRMenuBuilderPage() {
     const [activeTab, setActiveTab] = useState<'design' | 'preview'>('design');
     const [primaryColor, setPrimaryColor] = useState('#09090B');
     const [tableNumber, setTableNumber] = useState('12');
+    const [baseUrl, setBaseUrl] = useState('');
+    
+    // We use a ref to target the canvas for downloading
+    const qrRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        // Only safely access window in useEffect and avoid sync cascading updates
+        const timer = setTimeout(() => {
+            setBaseUrl(window.location.origin);
+        }, 0);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // The dynamic URL this QR code points to
+    const targetUrl = `${baseUrl}/customer-menu?table=${tableNumber || '1'}`;
+
+    const handleCopyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(targetUrl);
+            toast.success('Link copied to clipboard!');
+        } catch {
+            toast.error('Failed to copy link');
+        }
+    };
+
+    const handleDownloadQR = () => {
+        if (!qrRef.current) return;
+        
+        // Find the canvas element inside our ref container
+        const canvas = qrRef.current.querySelector('canvas');
+        if (!canvas) {
+            toast.error('QR Code not ready');
+            return;
+        }
+
+        // Convert the canvas data to an image URL
+        const pngUrl = canvas
+            .toDataURL('image/png')
+            .replace('image/png', 'image/octet-stream');
+        
+        // Trigger generic browser download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = pngUrl;
+        downloadLink.download = `table-${tableNumber || '1'}-menu-qr.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        toast.success('QR Code downloaded!');
+    };
 
     return (
         <div className="space-y-6 page-enter pb-8 h-full flex flex-col">
@@ -47,12 +99,12 @@ export default function QRMenuBuilderPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>Restaurant Logo</label>
+                                <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>Restaurant Logo (Placeholder)</label>
                                 <div className="border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors" style={{ borderColor: 'var(--border)' }}>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'var(--accent)' }}>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: primaryColor }}>
                                         <span className="text-white text-xs font-bold font-['Outfit']">mR</span>
                                     </div>
-                                    <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Click to upload new logo</span>
+                                    <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Updating brand propagates to mock</span>
                                 </div>
                             </div>
                         </div>
@@ -81,25 +133,36 @@ export default function QRMenuBuilderPage() {
                             </div>
 
                             <div className="flex items-center justify-center p-6 bg-white rounded-2xl border" style={{ borderColor: 'var(--border)' }}>
-                                {/* Mock QR Code representation */}
-                                <div className="w-40 h-40 grid grid-cols-5 grid-rows-5 gap-1 p-2 border-4 border-black rounded-xl">
-                                    {Array.from({ length: 25 }).map((_, i) => (
-                                        <div key={i} className={`rounded-sm ${(i * 17) % 10 > 4 ? 'bg-black' : 'bg-transparent'}`} />
-                                    ))}
-                                    {/* Center Logo */}
-                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                        <div className="w-10 h-10 bg-white border-2 border-black rounded flex items-center justify-center">
-                                            <span className="text-[10px] font-bold">mR</span>
-                                        </div>
-                                    </div>
+                                {/* Real QR Code Rendering */}
+                                <div className="p-2 border-4 border-black rounded-xl" ref={qrRef}>
+                                    {baseUrl ? (
+                                        <QRCodeCanvas
+                                            value={targetUrl}
+                                            size={160}
+                                            bgColor={"#ffffff"}
+                                            fgColor={primaryColor}
+                                            level={"Q"}
+                                            includeMargin={false}
+                                        />
+                                    ) : (
+                                        <div className="w-[160px] h-[160px] bg-gray-100 flex items-center justify-center text-xs text-gray-400">Loading...</div>
+                                    )}
                                 </div>
                             </div>
 
                             <div className="flex gap-2">
-                                <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-colors bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
+                                <button 
+                                    onClick={handleCopyLink}
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-colors bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 font-bold text-sm" 
+                                    style={{ color: 'var(--text-primary)' }}
+                                >
                                     <LinkIcon className="w-4 h-4" /> Copy Link
                                 </button>
-                                <button className="flex-2 flex items-center justify-center gap-2 py-3 rounded-xl transition-all active:scale-[0.98] font-bold text-sm" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
+                                <button 
+                                    onClick={handleDownloadQR}
+                                    className="flex-2 flex items-center justify-center gap-2 py-3 px-3 rounded-xl transition-all active:scale-[0.98] font-bold text-sm" 
+                                    style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}
+                                >
                                     <DownloadSimple className="w-4 h-4" weight="bold" /> Download QR
                                 </button>
                             </div>

@@ -10,11 +10,14 @@ import {
     ArrowRight as ArrowRight,
     UserPlus as UserPlus,
     Armchair as Armchair,
+    QrCode as QrCode,
+    DownloadSimple as Download,
 } from '@phosphor-icons/react';
 import { useTableStore, TableStatus, RestaurantTable } from '@/stores/useTableStore';
 import { useOrdersStore } from '@/stores/useOrdersStore';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import QRCodeLib from 'qrcode';
 
 /* eslint-disable react-hooks/purity */
 
@@ -30,6 +33,8 @@ export default function TablesPage() {
     const orders = useOrdersStore((s) => s.orders);
     const router = useRouter();
     const [selectedTable, setSelectedTable] = useState<RestaurantTable | null>(null);
+    const [showQR, setShowQR] = useState(false);
+    const [qrDataUrl, setQrDataUrl] = useState('');
 
     const counts = {
         vacant: tables.filter((t) => t.status === 'vacant').length,
@@ -55,6 +60,23 @@ export default function TablesPage() {
         router.push('/menu');
         toast.success(`Starting order for Table ${table.id}`);
         setSelectedTable(null);
+    };
+
+    const generateTableQR = (tableId: number) => {
+        const url = typeof window !== 'undefined' ? `${window.location.origin}/customer-menu?table=${tableId}` : '';
+        if (url) {
+            QRCodeLib.toDataURL(url, { width: 400, margin: 2, color: { dark: '#000000', light: '#ffffff' }, errorCorrectionLevel: 'H' })
+                .then(setQrDataUrl);
+        }
+        setShowQR(true);
+    };
+
+    const downloadQR = () => {
+        if (!qrDataUrl) return;
+        const link = document.createElement('a');
+        link.download = `myRestro-Table-${selectedTable?.id}-QR.png`;
+        link.href = qrDataUrl;
+        link.click();
     };
 
     // Grid layout: simulate a floor plan with 3 rows
@@ -272,6 +294,11 @@ export default function TablesPage() {
                                         style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>
                                         <ChefHat className="w-3.5 h-3.5" weight="fill" /> New Order
                                     </motion.button>
+                                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => generateTableQR(selectedTable.id)}
+                                        className="w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5"
+                                        style={{ background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
+                                        <QrCode className="w-3.5 h-3.5" weight="bold" /> Show Table QR
+                                    </motion.button>
                                     {selectedTable.status === 'occupied' && (
                                         <button
                                             onClick={() => {
@@ -288,6 +315,41 @@ export default function TablesPage() {
                             </div>
                         </motion.div>
                     </>
+                )}
+            </AnimatePresence>
+
+            {/* QR Modal */}
+            <AnimatePresence>
+                {showQR && selectedTable && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+                        onClick={() => setShowQR(false)}>
+                        <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+                            className="rounded-2xl p-6 text-center max-w-sm w-full mx-4"
+                            style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}
+                            onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Table {selectedTable.id} QR</h3>
+                                <button onClick={() => setShowQR(false)} className="p-1 rounded-lg" style={{ color: 'var(--text-muted)' }}>
+                                    <X className="w-4 h-4" weight="bold" />
+                                </button>
+                            </div>
+                            {qrDataUrl && (
+                                <div className="bg-white rounded-xl p-4 mb-4 inline-block">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={qrDataUrl} alt={`Table ${selectedTable.id} QR`} className="w-56 h-56" />
+                                </div>
+                            )}
+                            <p className="text-[10px] mb-4" style={{ color: 'var(--text-muted)' }}>
+                                Scanning this code will open the menu directly on Table {selectedTable.id}. Guests can place orders seamlessly.
+                            </p>
+                            <button onClick={downloadQR}
+                                className="flex items-center gap-1.5 mx-auto px-4 py-2 rounded-lg text-xs font-medium"
+                                style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>
+                                <Download className="w-3.5 h-3.5" weight="bold" /> Download QR as PNG
+                            </button>
+                        </motion.div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </div>

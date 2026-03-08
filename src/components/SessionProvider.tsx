@@ -16,7 +16,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
             const { data: { session } } = await supabase.auth.getSession();
 
             if (!session) {
-                const publicPaths = ['/', '/login', '/customer-menu'];
+                const publicPaths = [
+                    '/', '/login', '/customer-menu',
+                    '/about', '/blog', '/careers', '/contact',
+                    '/help', '/docs', '/api-reference', '/status', '/integrations',
+                    '/privacy', '/terms', '/cookies'
+                ];
                 const isPublic = publicPaths.includes(pathname) || pathname.startsWith('/login/');
                 if (!isPublic) {
                     router.push('/login');

@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Lenis from 'lenis';
+import { useEffect } from 'react';
 import './(landing)/landing.css';
 
 import Navbar from './(landing)/components/Navbar';
@@ -15,32 +14,12 @@ import CTABanner from './(landing)/components/CTABanner';
 import Footer from './(landing)/components/Footer';
 
 export default function HomePage() {
-    const lenisRef = useRef<Lenis | null>(null);
-
     useEffect(() => {
         // Force light theme for landing page
         document.documentElement.setAttribute('data-theme', 'light');
         document.documentElement.classList.remove('dark');
         document.body.style.background = '#FAFAFA';
         document.body.style.color = '#09090B';
-
-        // Initialize Lenis smooth scroll
-        const lenis = new Lenis({
-            lerp: 0.1,
-            duration: 1.2,
-            smoothWheel: true,
-        });
-        lenisRef.current = lenis;
-
-        function raf(time: number) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        return () => {
-            lenis.destroy();
-        };
     }, []);
 
     return (

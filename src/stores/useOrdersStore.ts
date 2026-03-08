@@ -10,6 +10,7 @@ export interface KitchenOrder {
     items: CartItem[];
     specialNotes: string;
     status: 'pending' | 'preparing' | 'ready' | 'completed';
+    type?: 'Dine-In' | 'Takeaway' | 'Delivery'; // Keep optional for backwards compatibility
     total: number;
     createdAt: string;
     waiterName: string;

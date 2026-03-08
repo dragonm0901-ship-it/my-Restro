@@ -12,6 +12,8 @@ import {
 } from '@phosphor-icons/react';
 import { useOrdersStore, KitchenOrder } from '@/stores/useOrdersStore';
 import toast from 'react-hot-toast';
+import { printReceipt } from '@/lib/printUtils';
+import { PrintOrder } from '@/components/ReceiptPrinter';
 
 const VAT_RATE = 0.13;
 const SERVICE_CHARGE_RATE = 0.10;
@@ -44,6 +46,25 @@ export default function BillingPage() {
     }, [selectedOrder]);
 
     const handlePrint = () => {
+        if (!billData) return;
+        
+        const printPayload: PrintOrder = {
+            id: billData.order.id,
+            type: billData.order.type as 'Dine-In' | 'Takeaway' | 'Delivery',
+            table_number: billData.order.tableNumber.toString(),
+            items: billData.order.items.map(item => ({
+                name: item.menu_item.name,
+                quantity: item.quantity,
+                price: item.menu_item.price
+            })),
+            subtotal: billData.subtotal,
+            tax: billData.vat,
+            discount: 0,
+            total: billData.grandTotal,
+            date: new Date(billData.order.createdAt)
+        };
+
+        printReceipt(printPayload);
         toast.success('Bill sent to printer');
         setShowBill(false);
     };

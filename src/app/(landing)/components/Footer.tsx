@@ -5,27 +5,27 @@ import { LogoIcon } from '@/components/Logo';
 
 const footerLinks = {
     Product: [
-        { label: 'Features', href: '#features' },
-        { label: 'Pricing', href: '#pricing' },
-        { label: 'Gallery', href: '#gallery' },
-        { label: 'Integrations', href: '#' },
+        { label: 'Features', href: '/#features' },
+        { label: 'Pricing', href: '/#pricing' },
+        { label: 'Gallery', href: '/#gallery' },
+        { label: 'Integrations', href: '/integrations' },
     ],
     Company: [
-        { label: 'About Us', href: '#' },
-        { label: 'Blog', href: '#' },
-        { label: 'Careers', href: '#' },
-        { label: 'Contact', href: '#' },
+        { label: 'About Us', href: '/about' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Careers', href: '/careers' },
+        { label: 'Contact', href: '/contact' },
     ],
     Support: [
-        { label: 'Help Center', href: '#' },
-        { label: 'Documentation', href: '#' },
-        { label: 'API Reference', href: '#' },
-        { label: 'Status', href: '#' },
+        { label: 'Help Center', href: '/help' },
+        { label: 'Documentation', href: '/docs' },
+        { label: 'API Reference', href: '/api-reference' },
+        { label: 'Status', href: '/status' },
     ],
     Legal: [
-        { label: 'Privacy Policy', href: '#' },
-        { label: 'Terms of Service', href: '#' },
-        { label: 'Cookie Policy', href: '#' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Service', href: '/terms' },
+        { label: 'Cookie Policy', href: '/cookies' },
     ],
 };
 
@@ -100,13 +100,13 @@ export default function Footer() {
                             </h4>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 {links.map((link) => (
-                                    <a
+                                    <Link
                                         key={link.label}
                                         href={link.href}
                                         className="footer-link"
                                     >
                                         {link.label}
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
@@ -131,9 +131,9 @@ export default function Footer() {
                         © {new Date().getFullYear()} myRestro. All rights reserved.
                     </p>
                     <div style={{ display: 'flex', gap: '24px' }}>
-                        <a href="#" className="footer-link" style={{ fontSize: '13px' }}>Twitter</a>
-                        <a href="#" className="footer-link" style={{ fontSize: '13px' }}>LinkedIn</a>
-                        <a href="#" className="footer-link" style={{ fontSize: '13px' }}>GitHub</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>Twitter</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>LinkedIn</a>
+                        <a href="https://github.com/luishidalgoa/myRestro" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>GitHub</a>
                     </div>
                 </div>
             </div>

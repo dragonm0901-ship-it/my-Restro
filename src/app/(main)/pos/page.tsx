@@ -19,34 +19,34 @@ import {
     Motorcycle,
     Armchair,
 } from '@phosphor-icons/react';
-
-// === MOCK DATA ===
-const categories = ['All', 'Starters', 'Mains', 'Desserts', 'Beverages'];
-const menuItems = [
-    { id: 1, name: 'Truffle Fries', price: 450, category: 'Starters', image: 'https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&q=80', stock: 24, type: 'food' },
-    { id: 2, name: 'Margherita Pizza', price: 850, category: 'Mains', image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&q=80', stock: 15, type: 'food' },
-    { id: 3, name: 'Wagyu Burger', price: 1250, category: 'Mains', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', stock: 8, type: 'food' },
-    { id: 4, name: 'Caesar Salad', price: 650, category: 'Starters', image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=400&q=80', stock: 12, type: 'food' },
-    { id: 5, name: 'Iced Latte', price: 350, category: 'Beverages', image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=400&q=80', stock: 50, type: 'beverage' },
-    { id: 6, name: 'Craft IPA', price: 600, category: 'Beverages', image: 'https://images.unsplash.com/photo-1566633806327-68e152aaf26d?w=400&q=80', stock: 35, type: 'beverage' },
-    { id: 7, name: 'Tiramisu', price: 550, category: 'Desserts', image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea6c7e9?w=400&q=80', stock: 10, type: 'food' },
-    { id: 8, name: 'Mojito', price: 500, category: 'Beverages', image: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&q=80', stock: 40, type: 'beverage' },
-];
+import { useLiveQuery } from 'dexie-react-hooks';
+import { localDb } from '@/lib/db/localDb';
+import { useSync } from '@/hooks/useSync';
+import toast from 'react-hot-toast';
+import { PrintOrder } from '@/components/ReceiptPrinter';
+import { printReceipt, printKOT } from '@/lib/printUtils';
 
 type OrderType = 'Dine-In' | 'Takeaway' | 'Delivery';
-type CartItem = { id: number; name: string; price: number; quantity: number; type: string };
+type CartItem = { id: string; name: string; price: number; quantity: number; type: string };
 
 export default function POSPage() {
     const [search, setSearch] = useState('');
-    const [activeCategory, setActiveCategory] = useState('All');
+    const [activeCategory, setActiveCategory] = useState<string>('All');
     const [orderType, setOrderType] = useState<OrderType>('Dine-In');
     const [cart, setCart] = useState<CartItem[]>([]);
     const [selectedTable] = useState<string>('Select Table');
     const [isMenuList, setIsMenuList] = useState(false); // Grid vs List view
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [kotNumber, setKotNumber] = useState(1); // Mock KOT auto-increment
+
+    const { enqueueOrder } = useSync();
+
+    const categories = useLiveQuery(() => localDb.categories.orderBy('sort_order').toArray()) || [];
+    const menuItems = useLiveQuery(() => localDb.menu_items.toArray()) || [];
 
 
     const filteredItems = menuItems.filter(item =>
-        (activeCategory === 'All' || item.category === activeCategory) &&
+        (activeCategory === 'All' || item.category_id === activeCategory) &&
         item.name.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -60,7 +60,7 @@ export default function POSPage() {
         });
     };
 
-    const updateQuantity = (id: number, delta: number) => {
+    const updateQuantity = (id: string, delta: number) => {
         setCart(prev => prev.map(item => {
             if (item.id === id) {
                 const newQ = item.quantity + delta;
@@ -70,7 +70,7 @@ export default function POSPage() {
         }));
     };
 
-    const removeItem = (id: number) => {
+    const removeItem = (id: string) => {
         setCart(prev => prev.filter(item => item.id !== id));
     };
 
@@ -81,6 +81,71 @@ export default function POSPage() {
 
     const itemsForKOT = cart.filter(i => i.type === 'food').length;
     const itemsForBOT = cart.filter(i => i.type === 'beverage').length;
+
+    const handleCheckout = async () => {
+        if (cart.length === 0) return;
+        setIsProcessing(true);
+        try {
+            const newOrderPayload = {
+                type: orderType,
+                status: 'pending' as const,
+                table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+                subtotal,
+                tax,
+                discount,
+                total,
+                items: cart.map(item => ({
+                    menu_item_id: item.id,
+                    quantity: item.quantity,
+                    price_at_time: item.price
+                }))
+            };
+            
+            const localId = await enqueueOrder(newOrderPayload);
+            
+            // Generate print payload for the receipt printer
+            const printPayload: PrintOrder = {
+                id: localId.toString(),
+                type: orderType,
+                table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+                items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
+                subtotal, tax, discount, total,
+                date: new Date()
+            };
+            
+            toast.success('Order placed!');
+            setCart([]);
+            setOrderType('Dine-In');
+            
+            // Trigger print automatically
+            printReceipt(printPayload);
+
+        } catch {
+            toast.error('Failed to place order.');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const handlePrintKOT = () => {
+        if (cart.length === 0) {
+            toast.error("Cart is empty");
+            return;
+        }
+        
+        // Mock print payload just for KOT
+        const printPayload: PrintOrder = {
+            id: 'KOT',
+            type: orderType,
+            table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+            items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
+            subtotal, tax, discount, total,
+            date: new Date()
+        };
+        
+        printKOT(printPayload, kotNumber);
+        setKotNumber(prev => prev + 1);
+    };
 
     return (
         <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-100px)] overflow-auto lg:overflow-hidden rounded-3xl" style={{ border: '1px solid var(--border)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
@@ -113,18 +178,29 @@ export default function POSPage() {
 
                     {/* Categories Scroll */}
                     <div className="flex items-center gap-2 mt-5 overflow-x-auto hide-scrollbar pb-1 w-full min-w-0">
+                        <button
+                            onClick={() => setActiveCategory('All')}
+                            className="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all"
+                            style={{
+                                background: activeCategory === 'All' ? 'var(--accent)' : 'transparent',
+                                color: activeCategory === 'All' ? 'var(--accent-fg)' : 'var(--text-secondary)',
+                                border: `1px solid ${activeCategory === 'All' ? 'transparent' : 'var(--border)'}`
+                            }}
+                        >
+                            All
+                        </button>
                         {categories.map(cat => (
                             <button
-                                key={cat}
-                                onClick={() => setActiveCategory(cat)}
+                                key={cat.id}
+                                onClick={() => setActiveCategory(cat.id)}
                                 className="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all"
                                 style={{
-                                    background: activeCategory === cat ? 'var(--accent)' : 'transparent',
-                                    color: activeCategory === cat ? 'var(--accent-fg)' : 'var(--text-secondary)',
-                                    border: `1px solid ${activeCategory === cat ? 'transparent' : 'var(--border)'}`
+                                    background: activeCategory === cat.id ? 'var(--accent)' : 'transparent',
+                                    color: activeCategory === cat.id ? 'var(--accent-fg)' : 'var(--text-secondary)',
+                                    border: `1px solid ${activeCategory === cat.id ? 'transparent' : 'var(--border)'}`
                                 }}
                             >
-                                {cat}
+                                {cat.name}
                             </button>
                         ))}
                     </div>
@@ -150,8 +226,14 @@ export default function POSPage() {
                                     style={{ background: 'var(--bg-primary)', border: '1px solid var(--border)' }}
                                 >
                                     <div className={`${isMenuList ? 'w-24 h-24 shrink-0' : 'w-full h-32'} rounded-xl bg-gray-200 overflow-hidden relative ${!isMenuList ? 'mb-3' : ''}`}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                        {item.image ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-800">
+                                                <span className="text-2xl opacity-30">🍽️</span>
+                                            </div>
+                                        )}
                                         <div className="absolute top-2 right-2 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-2 py-1 rounded border border-white/20">
                                             <span className="text-[10px] font-bold text-black dark:text-white">Stock: {item.stock}</span>
                                         </div>
@@ -300,13 +382,20 @@ export default function POSPage() {
                             <ArrowsSplit className="w-5 h-5 shrink-0" />
                             <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Split</span>
                         </button>
-                        <button className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                        <button onClick={handlePrintKOT} className="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-colors" style={{ color: 'var(--text-secondary)' }}>
                             <Printer className="w-5 h-5 shrink-0" />
                             <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Print KOT</span>
                         </button>
-                        <button className="flex-[1.5] sm:flex-2 min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl shadow-lg transition-transform active:scale-[0.98]" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}>
-                            <span className="text-xs sm:text-sm font-bold truncate px-1 max-w-full">Charge</span>
-                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" weight="bold" />
+                        <button 
+                            disabled={isProcessing}
+                            onClick={handleCheckout}
+                            className="flex-[1.5] sm:flex-2 min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl shadow-lg transition-transform active:scale-[0.98] disabled:opacity-50" 
+                            style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}
+                        >
+                            <span className="text-xs sm:text-sm font-bold truncate px-1 max-w-full">
+                                {isProcessing ? 'Processing' : 'Charge'}
+                            </span>
+                            {!isProcessing && <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" weight="bold" />}
                         </button>
                     </div>
                 </div>

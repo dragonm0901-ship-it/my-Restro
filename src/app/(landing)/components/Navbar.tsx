@@ -15,10 +15,10 @@ export default function Navbar() {
     }, []);
 
     const navLinks = [
-        { label: 'Features', href: '#features' },
-        { label: 'How it Works', href: '#how-it-works' },
-        { label: 'Gallery', href: '#gallery' },
-        { label: 'Pricing', href: '#pricing' },
+        { label: 'Features', href: '/#features' },
+        { label: 'How it Works', href: '/#how-it-works' },
+        { label: 'Gallery', href: '/#gallery' },
+        { label: 'Pricing', href: '/#pricing' },
     ];
 
     return (
@@ -59,7 +59,7 @@ export default function Navbar() {
                 {/* Desktop Nav */}
                 <div className="nav-desktop-links">
                     {navLinks.map((link) => (
-                        <a
+                        <Link
                             key={link.label}
                             href={link.href}
                             style={{
@@ -74,7 +74,7 @@ export default function Navbar() {
                             onMouseLeave={(e) => (e.currentTarget.style.color = '#52525B')}
                         >
                             {link.label}
-                        </a>
+                        </Link>
                     ))}
                 </div>
 
@@ -189,7 +189,7 @@ export default function Navbar() {
             >
                 <div style={{ padding: '16px 24px 24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {navLinks.map((link) => (
-                        <a
+                        <Link
                             key={link.label}
                             href={link.href}
                             onClick={() => setMobileOpen(false)}
@@ -204,7 +204,7 @@ export default function Navbar() {
                             }}
                         >
                             {link.label}
-                        </a>
+                        </Link>
                     ))}
                     <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
                         <Link

@@ -77,8 +77,15 @@ export default function LoginPage() {
 
                 if (error) throw error;
 
+                // Fetch profile to get restaurantId
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('restaurant_id')
+                    .eq('id', data.user.id)
+                    .maybeSingle();
+
                 // Set role in store based on selection
-                setRole(selectedRole, data.user?.user_metadata?.full_name || undefined);
+                setRole(selectedRole, data.user?.user_metadata?.full_name || undefined, profile?.restaurant_id);
 
                 toast.success('Welcome back!');
                 // Route them based on their profile role
@@ -310,6 +317,17 @@ export default function LoginPage() {
 
                                                 if (r === 'owner') {
                                                     await supabase.rpc('create_restaurant_and_link', { restaurant_name: 'Demo Restaurant' });
+                                                } else {
+                                                    // For demo chef/waiter, try to link them to an existing demo restaurant
+                                                    const { data: demoRestro } = await supabase.from('restaurants').select('id').ilike('name', 'Demo Restaurant').limit(1).maybeSingle();
+                                                    if (demoRestro) {
+                                                        await supabase.from('profiles').insert({
+                                                            id: signUpError ? undefined : (await supabase.auth.getUser()).data.user?.id,
+                                                            restaurant_id: demoRestro.id,
+                                                            role: r,
+                                                            full_name: `Demo ${r}`
+                                                        });
+                                                    }
                                                 }
                                                 const retry = await supabase.auth.signInWithPassword({ email, password });
                                                 error = retry.error;
@@ -317,7 +335,13 @@ export default function LoginPage() {
                                             }
                                             if (error) throw error;
 
-                                            setRole(r, data.user?.user_metadata?.full_name);
+                                            const { data: profile } = await supabase
+                                                .from('profiles')
+                                                .select('restaurant_id')
+                                                .eq('id', data.user?.id)
+                                                .maybeSingle();
+
+                                            setRole(r, data.user?.user_metadata?.full_name, profile?.restaurant_id);
                                             toast.success(`Logged in as Demo ${r}`);
 
                                             if (r === 'chef') router.push('/kds');
