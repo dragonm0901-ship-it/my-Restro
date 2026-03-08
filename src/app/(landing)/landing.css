@@ -13,8 +13,29 @@
   --accent-fg: #FFFFFF;
   --border: #E4E4E7;
   --border-hover: #D4D4D8;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
   color-scheme: light;
   overflow-x: hidden;
+  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark mode overrides */
+.landing-root[data-theme="dark"] {
+  --bg-primary: #09090B;
+  --bg-secondary: #111113;
+  --bg-card: #18181B;
+  --bg-elevated: #27272A;
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --accent: #FFFFFF;
+  --accent-fg: #09090B;
+  --border: #27272A;
+  --border-hover: #3F3F46;
+  --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
 }
 
 /* ============ HERO ============ */
@@ -158,8 +179,8 @@
   position: relative;
   padding: 40px 32px;
   border-radius: 24px;
-  background: #FFFFFF;
-  border: 1px solid #E4E4E7;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
 }
@@ -171,7 +192,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #09090B;
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -180,7 +201,7 @@
 .feature-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.1);
-  border-color: #D4D4D8;
+  border-color: var(--border-hover);
 }
 
 .feature-card:hover::before {
@@ -194,18 +215,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F4F4F5;
+  background: var(--bg-elevated);
   margin-bottom: 24px;
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .feature-card:hover .feature-icon-wrap {
-  background: #09090B;
+  background: var(--accent);
   transform: scale(1.05);
 }
 
 .feature-card:hover .feature-icon-wrap svg {
-  color: #FFFFFF !important;
+  color: var(--accent-fg) !important;
 }
 
 /* ============ STEP CARDS ============ */
@@ -215,7 +236,7 @@
   top: 64px;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #E4E4E7, transparent);
+  background: linear-gradient(to bottom, var(--border), transparent);
 }
 
 .step-number {
@@ -228,8 +249,8 @@
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
   font-size: 24px;
-  background: #09090B;
-  color: #FFFFFF;
+  background: var(--accent);
+  color: var(--accent-fg);
   flex-shrink: 0;
   transition: transform 0.3s ease;
 }
@@ -238,14 +259,14 @@
 .testimonial-card {
   padding: 36px;
   border-radius: 24px;
-  background: #FFFFFF;
-  border: 1px solid #E4E4E7;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .testimonial-card:hover {
-  border-color: #D4D4D8;
-  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.08);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card);
   transform: translateY(-4px);
 }
 
@@ -254,8 +275,8 @@
   position: relative;
   padding: 80px 40px;
   border-radius: 32px;
-  background: #09090B;
-  color: #FFFFFF;
+  background: var(--accent);
+  color: var(--accent-fg);
   overflow: hidden;
 }
 
@@ -327,8 +348,8 @@
 }
 
 .landing-nav.scrolled {
-  background: rgba(255, 255, 255, 0.88);
-  border-bottom: 1px solid #E4E4E7;
+  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -355,7 +376,7 @@
 
 /* ============ UTILITIES ============ */
 .text-gradient {
-  background: linear-gradient(135deg, #09090B 0%, #52525B 100%);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -366,8 +387,8 @@
   align-items: center;
   gap: 8px;
   padding: 14px 32px;
-  background: #09090B;
-  color: #FFFFFF;
+  background: var(--accent);
+  color: var(--accent-fg);
   border-radius: 14px;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
@@ -379,9 +400,9 @@
 }
 
 .btn-primary:hover {
-  background: #27272A;
+  opacity: 0.85;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -8px rgba(9, 9, 11, 0.3);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary:active {
@@ -411,14 +432,14 @@
 
 /* ============ FOOTER ============ */
 .footer-link {
-  color: #71717A;
+  color: var(--text-muted);
   font-size: 14px;
   transition: color 0.2s ease;
   text-decoration: none;
 }
 
 .footer-link:hover {
-  color: #09090B;
+  color: var(--text-primary);
 }
 
 /* ============ HERO GRID RESPONSIVE ============ */

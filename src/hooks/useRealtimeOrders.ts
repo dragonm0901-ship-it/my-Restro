@@ -64,6 +64,7 @@ export function useRealtimeOrders() {
                             id: oi.menu_item_id,
                             name: oi.menu_item?.name || 'Unknown',
                             image_url: oi.menu_item?.image || '',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         } as any, // Only UI-required fields mapped for kitchen view
                         quantity: oi.quantity,
                     })),

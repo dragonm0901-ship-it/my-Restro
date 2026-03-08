@@ -177,20 +177,18 @@ export default function Hero() {
                 <div ref={imageRef} style={{ position: 'relative', opacity: 0 }}>
                     <div style={{
                         position: 'relative',
-                        borderRadius: '24px',
+                        borderRadius: '300px 300px 24px 24px',
                         overflow: 'hidden',
                         boxShadow: '0 40px 80px -20px rgba(0,0,0,0.12)',
                         border: '1px solid #E4E4E7',
+                        aspectRatio: '4/5',
                     }}>
                         <Image
-                            src="/landing/restaurant-1.png"
-                            alt="Luxury restaurant interior"
-                            width={640}
-                            height={480}
+                            src="/landing/hero-waitstaff.png"
+                            alt="Nepali waitstaff in a luxury villa using myRestro"
+                            fill
                             priority
                             style={{
-                                width: '100%',
-                                height: 'auto',
                                 objectFit: 'cover',
                                 display: 'block',
                             }}

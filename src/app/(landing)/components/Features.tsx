@@ -112,11 +112,11 @@ export default function Features() {
                     display: 'inline-block',
                     padding: '6px 16px',
                     borderRadius: '100px',
-                    background: '#F4F4F5',
-                    border: '1px solid #E4E4E7',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border)',
                     fontSize: '13px',
                     fontWeight: 600,
-                    color: '#52525B',
+                    color: 'var(--text-secondary)',
                     marginBottom: '20px',
                     fontFamily: "'Inter', sans-serif",
                 }}>
@@ -128,7 +128,7 @@ export default function Features() {
                     fontSize: 'clamp(28px, 4vw, 48px)',
                     lineHeight: 1.1,
                     letterSpacing: '-0.02em',
-                    color: '#09090B',
+                    color: 'var(--text-primary)',
                     marginBottom: '16px',
                 }}>
                     Everything you need to run<br />
@@ -137,7 +137,7 @@ export default function Features() {
                 <p style={{
                     fontSize: '17px',
                     lineHeight: 1.6,
-                    color: '#71717A',
+                    color: 'var(--text-secondary)',
                     maxWidth: '520px',
                     margin: '0 auto',
                     fontFamily: "'Inter', sans-serif",
@@ -160,13 +160,13 @@ export default function Features() {
                     return (
                         <div key={i} className="feature-card">
                             <div className="feature-icon-wrap">
-                                <Icon size={26} weight="duotone" style={{ color: '#09090B', transition: 'color 0.3s ease' }} />
+                                <Icon size={26} weight="duotone" className="feature-icon" style={{ color: 'var(--text-primary)', transition: 'color 0.3s ease' }} />
                             </div>
                             <h3 style={{
                                 fontFamily: "'Outfit', sans-serif",
                                 fontWeight: 700,
                                 fontSize: '20px',
-                                color: '#09090B',
+                                color: 'var(--text-primary)',
                                 marginBottom: '10px',
                             }}>
                                 {feature.title}
@@ -174,7 +174,7 @@ export default function Features() {
                             <p style={{
                                 fontSize: '14px',
                                 lineHeight: 1.6,
-                                color: '#71717A',
+                                color: 'var(--text-secondary)',
                                 fontFamily: "'Inter', sans-serif",
                             }}>
                                 {feature.description}

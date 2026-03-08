@@ -39,6 +39,7 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoaded(false); // Reset load state
         } else {
             document.body.style.overflow = '';
@@ -87,7 +88,7 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                             <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-accent opacity-50" />
 
                             <div className="w-full h-full relative z-10">
-                                {/* @ts-ignore - model-viewer is a custom element */}
+                                {/* @ts-expect-error - model-viewer is a custom element */}
                                 <model-viewer
                                     ref={modelRef}
                                     src={modelSrc}
@@ -104,7 +105,7 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                                         <CubeFocus className="w-5 h-5" weight="fill" />
                                         View in your space
                                     </button>
-                                {/* @ts-ignore */}
+                                {/* @ts-expect-error - model-viewer is a custom element */}
                                 </model-viewer>
                             </div>
 

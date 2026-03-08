@@ -7,6 +7,11 @@ import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
 import CTABanner from './components/CTABanner';
 import Footer from './components/Footer';
+import InteractiveDemo from './components/InteractiveDemo';
+import ROICalculator from './components/ROICalculator';
+import IntegrationsGrid from './components/IntegrationsGrid';
+import UseCaseTabs from './components/UseCaseTabs';
+import VideoExplainer from './components/VideoExplainer';
 
 export default function LandingPage() {
     return (
@@ -14,11 +19,16 @@ export default function LandingPage() {
             <Navbar />
             <main>
                 <Hero />
+                <ROICalculator />
                 <Features />
                 <HowItWorks />
+                <IntegrationsGrid />
                 <Gallery />
+                <InteractiveDemo />
                 <Testimonials />
+                <UseCaseTabs />
                 <Pricing />
+                <VideoExplainer />
                 <CTABanner />
             </main>
             <Footer />

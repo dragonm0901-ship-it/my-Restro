@@ -89,7 +89,7 @@ export default function Pricing() {
             ref={sectionRef}
             style={{
                 padding: '120px 24px',
-                background: '#FAFAFA',
+                background: 'var(--bg-primary)',
             }}
         >
             <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
@@ -99,11 +99,11 @@ export default function Pricing() {
                         display: 'inline-block',
                         padding: '6px 16px',
                         borderRadius: '100px',
-                        background: '#F4F4F5',
-                        border: '1px solid #E4E4E7',
+                        background: 'var(--bg-elevated)',
+                        border: '1px solid var(--border)',
                         fontSize: '13px',
                         fontWeight: 600,
-                        color: '#52525B',
+                        color: 'var(--text-secondary)',
                         marginBottom: '20px',
                         fontFamily: "'Inter', sans-serif",
                     }}>
@@ -115,7 +115,7 @@ export default function Pricing() {
                         fontSize: 'clamp(28px, 4vw, 48px)',
                         lineHeight: 1.1,
                         letterSpacing: '-0.02em',
-                        color: '#09090B',
+                        color: 'var(--text-primary)',
                         marginBottom: '16px',
                     }}>
                         Plans that scale with<br />your business
@@ -123,7 +123,7 @@ export default function Pricing() {
                     <p style={{
                         fontSize: '17px',
                         lineHeight: 1.6,
-                        color: '#71717A',
+                        color: 'var(--text-secondary)',
                         maxWidth: '440px',
                         margin: '0 auto',
                         fontFamily: "'Inter', sans-serif",
@@ -142,7 +142,7 @@ export default function Pricing() {
                         <span style={{
                             fontSize: '14px',
                             fontWeight: 600,
-                            color: !yearly ? '#09090B' : '#A1A1AA',
+                            color: !yearly ? 'var(--text-primary)' : 'var(--text-muted)',
                             fontFamily: "'Inter', sans-serif",
                             transition: 'color 0.2s ease',
                         }}>
@@ -158,7 +158,7 @@ export default function Pricing() {
                             <span style={{
                                 fontSize: '14px',
                                 fontWeight: 600,
-                                color: yearly ? '#09090B' : '#A1A1AA',
+                                color: yearly ? 'var(--text-primary)' : 'var(--text-muted)',
                                 fontFamily: "'Inter', sans-serif",
                                 transition: 'color 0.2s ease',
                             }}>
@@ -201,10 +201,10 @@ export default function Pricing() {
                                     flexDirection: 'column',
                                     padding: '36px 32px',
                                     borderRadius: '24px',
-                                    background: '#FFFFFF',
-                                    border: plan.popular ? '2px solid #09090B' : '1px solid #E4E4E7',
+                                    background: 'var(--bg-card)',
+                                    border: plan.popular ? '2px solid var(--text-primary)' : '1px solid var(--border)',
                                     transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-                                    boxShadow: plan.popular ? '0 16px 48px -12px rgba(9,9,11,0.12)' : 'none',
+                                    boxShadow: plan.popular ? 'var(--shadow-card)' : 'none',
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = 'translateY(-6px)';
@@ -212,7 +212,7 @@ export default function Pricing() {
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = plan.popular ? '0 16px 48px -12px rgba(9,9,11,0.12)' : 'none';
+                                    e.currentTarget.style.boxShadow = plan.popular ? 'var(--shadow-card)' : 'none';
                                 }}
                             >
                                 {plan.popular && (
@@ -223,8 +223,8 @@ export default function Pricing() {
                                         transform: 'translateX(-50%)',
                                         padding: '5px 18px',
                                         borderRadius: '100px',
-                                        background: '#09090B',
-                                        color: '#FFFFFF',
+                                        background: 'var(--text-primary)',
+                                        color: 'var(--bg-primary)',
                                         fontSize: '11px',
                                         fontWeight: 700,
                                         textTransform: 'uppercase',
@@ -240,14 +240,14 @@ export default function Pricing() {
                                         fontFamily: "'Outfit', sans-serif",
                                         fontWeight: 700,
                                         fontSize: '22px',
-                                        color: '#09090B',
+                                        color: 'var(--text-primary)',
                                         marginBottom: '6px',
                                     }}>
                                         {plan.name}
                                     </h3>
                                     <p style={{
                                         fontSize: '13px',
-                                        color: '#A1A1AA',
+                                        color: 'var(--text-muted)',
                                         fontFamily: "'Inter', sans-serif",
                                     }}>
                                         {plan.description}
@@ -260,7 +260,7 @@ export default function Pricing() {
                                             fontFamily: "'Outfit', sans-serif",
                                             fontWeight: 800,
                                             fontSize: '36px',
-                                            color: '#09090B',
+                                            color: 'var(--text-primary)',
                                             letterSpacing: '-0.02em',
                                         }}>
                                             NPR {displayPrice.toLocaleString()}
@@ -268,7 +268,7 @@ export default function Pricing() {
                                         <span style={{
                                             fontSize: '13px',
                                             fontWeight: 600,
-                                            color: '#A1A1AA',
+                                            color: 'var(--text-muted)',
                                             fontFamily: "'Inter', sans-serif",
                                         }}>
                                             /mo
@@ -277,7 +277,7 @@ export default function Pricing() {
                                     {yearly && (
                                         <p style={{
                                             fontSize: '12px',
-                                            color: '#71717A',
+                                            color: 'var(--text-secondary)',
                                             marginTop: '4px',
                                             fontFamily: "'Inter', sans-serif",
                                         }}>
@@ -293,17 +293,17 @@ export default function Pricing() {
                                                 width: '20px',
                                                 height: '20px',
                                                 borderRadius: '6px',
-                                                background: '#F4F4F5',
+                                                background: 'var(--bg-elevated)',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 flexShrink: 0,
                                             }}>
-                                                <Check size={12} weight="bold" style={{ color: '#09090B' }} />
+                                                <Check size={12} weight="bold" style={{ color: 'var(--text-primary)' }} />
                                             </div>
                                             <span style={{
                                                 fontSize: '14px',
-                                                color: '#52525B',
+                                                color: 'var(--text-secondary)',
                                                 fontFamily: "'Inter', sans-serif",
                                             }}>
                                                 {feature}
@@ -321,8 +321,8 @@ export default function Pricing() {
                                         gap: '8px',
                                         padding: '14px',
                                         borderRadius: '14px',
-                                        background: plan.popular ? '#09090B' : '#F4F4F5',
-                                        color: plan.popular ? '#FFFFFF' : '#09090B',
+                                        background: plan.popular ? 'var(--text-primary)' : 'var(--bg-elevated)',
+                                        color: plan.popular ? 'var(--bg-primary)' : 'var(--text-primary)',
                                         fontWeight: 700,
                                         fontSize: '14px',
                                         textDecoration: 'none',
@@ -331,16 +331,16 @@ export default function Pricing() {
                                     }}
                                     onMouseEnter={(e) => {
                                         if (plan.popular) {
-                                            e.currentTarget.style.background = '#27272A';
+                                            e.currentTarget.style.opacity = '0.85';
                                         } else {
-                                            e.currentTarget.style.background = '#E4E4E7';
+                                            e.currentTarget.style.background = 'var(--border)';
                                         }
                                     }}
                                     onMouseLeave={(e) => {
                                         if (plan.popular) {
-                                            e.currentTarget.style.background = '#09090B';
+                                            e.currentTarget.style.opacity = '1';
                                         } else {
-                                            e.currentTarget.style.background = '#F4F4F5';
+                                            e.currentTarget.style.background = 'var(--bg-elevated)';
                                         }
                                     }}
                                 >

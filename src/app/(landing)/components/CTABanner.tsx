@@ -41,11 +41,11 @@ export default function CTABanner() {
                     display: 'inline-block',
                     padding: '6px 16px',
                     borderRadius: '100px',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'color-mix(in srgb, var(--accent-fg) 10%, transparent)',
+                    border: '1px solid color-mix(in srgb, var(--accent-fg) 15%, transparent)',
                     fontSize: '13px',
                     fontWeight: 600,
-                    color: 'rgba(255, 255, 255, 0.7)',
+                    color: 'color-mix(in srgb, var(--accent-fg) 70%, transparent)',
                     marginBottom: '24px',
                     fontFamily: "'Inter', sans-serif",
                 }}>
@@ -58,7 +58,7 @@ export default function CTABanner() {
                     fontSize: 'clamp(28px, 4vw, 48px)',
                     lineHeight: 1.1,
                     letterSpacing: '-0.02em',
-                    color: '#FFFFFF',
+                    color: 'var(--accent-fg)',
                     marginBottom: '18px',
                     position: 'relative',
                     zIndex: 1,
@@ -69,7 +69,7 @@ export default function CTABanner() {
                 <p style={{
                     fontSize: '17px',
                     lineHeight: 1.6,
-                    color: 'rgba(255, 255, 255, 0.6)',
+                    color: 'color-mix(in srgb, var(--accent-fg) 60%, transparent)',
                     maxWidth: '460px',
                     margin: '0 auto 36px',
                     fontFamily: "'Inter', sans-serif",
@@ -95,8 +95,8 @@ export default function CTABanner() {
                             alignItems: 'center',
                             gap: '8px',
                             padding: '14px 32px',
-                            background: '#FFFFFF',
-                            color: '#09090B',
+                            background: 'var(--accent-fg)',
+                            color: 'var(--accent)',
                             borderRadius: '14px',
                             fontWeight: 700,
                             fontSize: '15px',
@@ -106,7 +106,7 @@ export default function CTABanner() {
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 8px 24px rgba(255,255,255,0.2)';
+                            e.currentTarget.style.boxShadow = '0 8px 24px color-mix(in srgb, var(--accent-fg) 20%, transparent)';
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'translateY(0)';
@@ -125,22 +125,22 @@ export default function CTABanner() {
                             gap: '8px',
                             padding: '14px 32px',
                             background: 'transparent',
-                            color: 'rgba(255, 255, 255, 0.8)',
+                            color: 'color-mix(in srgb, var(--accent-fg) 80%, transparent)',
                             borderRadius: '14px',
                             fontWeight: 600,
                             fontSize: '15px',
                             textDecoration: 'none',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            border: '1px solid color-mix(in srgb, var(--accent-fg) 20%, transparent)',
                             transition: 'all 0.3s ease',
                             fontFamily: "'Inter', sans-serif",
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-                            e.currentTarget.style.color = '#FFFFFF';
+                            e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--accent-fg) 40%, transparent)';
+                            e.currentTarget.style.color = 'var(--accent-fg)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                            e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--accent-fg) 20%, transparent)';
+                            e.currentTarget.style.color = 'color-mix(in srgb, var(--accent-fg) 80%, transparent)';
                         }}
                     >
                         Request Demo

@@ -1,185 +1,98 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Star } from '@phosphor-icons/react';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from 'framer-motion';
+import { Star, Quotes } from '@phosphor-icons/react';
 
 const testimonials = [
     {
-        name: 'Rajesh Shrestha',
-        role: 'Owner, Himalayan Kitchen',
-        text: 'myRestro transformed how we manage our restaurant. Orders flow seamlessly from QR codes to the kitchen display. Our turnaround time dropped by 40%.',
+        name: "Suresh Thapa",
+        role: "Owner, The Himalayan Villa",
+        content: "myRestro completely transformed how we handle peak hours. The KDS keeps the kitchen calm, and our table turnover has never been faster.",
         rating: 5,
+        image: "https://i.pravatar.cc/150?u=suresh",
     },
     {
-        name: 'Sita Gurung',
-        role: 'Manager, Café Thamel',
-        text: 'The digital menu and QR ordering system is a game-changer. Customers love ordering from their phones and our staff can focus on service quality.',
+        name: "Anita Gurung",
+        role: "Head Chef, Kathmandu Delights",
+        content: "I used to lose my voice shouting orders over the noise. Now, everything appears instantly on the display. It's a lifesaver.",
         rating: 5,
+        image: "https://i.pravatar.cc/150?u=anita",
     },
     {
-        name: 'Prakash Tamang',
-        role: 'Head Chef, Durbar Bistro',
-        text: 'As a chef, the Kitchen Display System is incredible. I see orders in real-time, prioritize by timing, and never miss a ticket. It just works beautifully.',
+        name: "Rajesh Shrestha",
+        role: "Manager, Everest Coffee House",
+        content: "The QR code ordering is so intuitive that even our older customers use it without asking for help. Our average order value actually went up!",
         rating: 5,
+        image: "https://i.pravatar.cc/150?u=rajesh",
     },
+    {
+        name: "Priya Lama",
+        role: "Operations Director, Bento Box Co.",
+        content: "We run 3 different locations. Being able to see real-time analytics for all of them from my phone is incredible.",
+        rating: 4,
+        image: "https://i.pravatar.cc/150?u=priya",
+    },
+    {
+        name: "Bikash Maharjan",
+        role: "Floor Supervisor, Lakeside Grill",
+        content: "No more lost paper tickets or arguments about who ordered what. The digital trail is perfect, and the UI is genuinely beautiful to use.",
+        rating: 5,
+        image: "https://i.pravatar.cc/150?u=bikash",
+    },
+    {
+        name: "Nima Sherpa",
+        role: "Founder, Yeti's Den",
+        content: "I was skeptical about SaaS pricing at first, but this software pays for itself in just a few days of saved labor and eliminated mistakes.",
+        rating: 5,
+        image: "https://i.pravatar.cc/150?u=nima",
+    }
 ];
 
 export default function Testimonials() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const headingRef = useRef<HTMLDivElement>(null);
-    const cardsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(
-                headingRef.current,
-                { opacity: 0, y: 40 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: headingRef.current,
-                        start: 'top 85%',
-                        once: true,
-                    },
-                }
-            );
-
-            const cards = cardsRef.current?.querySelectorAll('.testimonial-card');
-            if (cards) {
-                gsap.fromTo(
-                    cards,
-                    { opacity: 0, y: 40, scale: 0.96 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        duration: 0.7,
-                        stagger: 0.12,
-                        ease: 'power3.out',
-                        scrollTrigger: {
-                            trigger: cardsRef.current,
-                            start: 'top 80%',
-                            once: true,
-                        },
-                    }
-                );
-            }
-        }, sectionRef);
-
-        return () => ctx.revert();
-    }, []);
-
     return (
-        <section
-            ref={sectionRef}
-            style={{
-                padding: '120px 24px',
-                background: '#FFFFFF',
-            }}
-        >
-            <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-                {/* Heading */}
-                <div ref={headingRef} style={{ textAlign: 'center', marginBottom: '64px' }}>
-                    <span style={{
-                        display: 'inline-block',
-                        padding: '6px 16px',
-                        borderRadius: '100px',
-                        background: '#F4F4F5',
-                        border: '1px solid #E4E4E7',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        color: '#52525B',
-                        marginBottom: '20px',
-                        fontFamily: "'Inter', sans-serif",
-                    }}>
-                        Testimonials
-                    </span>
-                    <h2 style={{
-                        fontFamily: "'Outfit', sans-serif",
-                        fontWeight: 800,
-                        fontSize: 'clamp(28px, 4vw, 48px)',
-                        lineHeight: 1.1,
-                        letterSpacing: '-0.02em',
-                        color: '#09090B',
-                        marginBottom: '16px',
-                    }}>
-                        Loved by restaurant<br />owners across Nepal
+        <section id="testimonials" className="py-24 relative overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-black font-['Outfit'] mb-6 tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                        Loved by Restaurant Teams
                     </h2>
+                    <p className="text-lg max-w-2xl mx-auto font-['Inter']" style={{ color: 'var(--text-secondary)' }}>
+                        Don&apos;t just take our word for it. Here is what owners, chefs, and managers are saying about their experience with myRestro.
+                    </p>
                 </div>
 
-                {/* Cards */}
-                <div
-                    ref={cardsRef}
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: '24px',
-                    }}
-                >
+                {/* Masonry Grid */}
+                <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
                     {testimonials.map((t, i) => (
-                        <div key={i} className="testimonial-card">
-                            {/* Stars */}
-                            <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
-                                {Array.from({ length: t.rating }).map((_, j) => (
-                                    <Star key={j} size={18} weight="fill" style={{ color: '#F59E0B' }} />
+                        <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: i * 0.1 }}
+                            className="testimonial-card break-inside-avoid relative group"
+                        >
+                            <Quotes className="w-10 h-10 absolute top-6 right-6 opacity-10" weight="fill" style={{ color: 'var(--text-muted)' }} />
+                            
+                            <div className="flex gap-1 mb-6">
+                                {[...Array(t.rating)].map((_, i) => (
+                                    <Star key={i} className="w-4 h-4 text-yellow-500" weight="fill" />
                                 ))}
                             </div>
-
-                            {/* Quote */}
-                            <p style={{
-                                fontSize: '15px',
-                                lineHeight: 1.7,
-                                color: '#52525B',
-                                marginBottom: '24px',
-                                fontFamily: "'Inter', sans-serif",
-                                fontStyle: 'italic',
-                            }}>
-                                &ldquo;{t.text}&rdquo;
+                            
+                            <p className="text-base leading-relaxed mb-8 font-['Inter']" style={{ color: 'var(--text-secondary)' }}>
+                                &ldquo;{t.content}&rdquo;
                             </p>
-
-                            {/* Author */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{
-                                    width: '42px',
-                                    height: '42px',
-                                    borderRadius: '12px',
-                                    background: '#F4F4F5',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontFamily: "'Outfit', sans-serif",
-                                    fontWeight: 800,
-                                    fontSize: '16px',
-                                    color: '#09090B',
-                                }}>
-                                    {t.name.charAt(0)}
-                                </div>
+                            
+                            <div className="flex items-center gap-4">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover" style={{ border: '2px solid var(--border)' }} />
                                 <div>
-                                    <p style={{
-                                        fontSize: '14px',
-                                        fontWeight: 700,
-                                        color: '#09090B',
-                                        fontFamily: "'Inter', sans-serif",
-                                    }}>
-                                        {t.name}
-                                    </p>
-                                    <p style={{
-                                        fontSize: '12px',
-                                        color: '#A1A1AA',
-                                        fontFamily: "'Inter', sans-serif",
-                                    }}>
-                                        {t.role}
-                                    </p>
+                                    <h4 className="font-bold text-sm tracking-wide" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
+                                    <p className="text-xs font-mono mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

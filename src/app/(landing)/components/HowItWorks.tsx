@@ -78,7 +78,7 @@ export default function HowItWorks() {
             ref={sectionRef}
             style={{
                 padding: '120px 24px',
-                background: '#FFFFFF',
+                background: 'var(--bg-primary)',
             }}
         >
             <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -88,11 +88,11 @@ export default function HowItWorks() {
                         display: 'inline-block',
                         padding: '6px 16px',
                         borderRadius: '100px',
-                        background: '#F4F4F5',
-                        border: '1px solid #E4E4E7',
+                        background: 'var(--bg-elevated)',
+                        border: '1px solid var(--border)',
                         fontSize: '13px',
                         fontWeight: 600,
-                        color: '#52525B',
+                        color: 'var(--text-secondary)',
                         marginBottom: '20px',
                         fontFamily: "'Inter', sans-serif",
                     }}>
@@ -104,7 +104,7 @@ export default function HowItWorks() {
                         fontSize: 'clamp(28px, 4vw, 48px)',
                         lineHeight: 1.1,
                         letterSpacing: '-0.02em',
-                        color: '#09090B',
+                        color: 'var(--text-primary)',
                         marginBottom: '16px',
                     }}>
                         Up and running in<br />three simple steps
@@ -112,7 +112,7 @@ export default function HowItWorks() {
                     <p style={{
                         fontSize: '17px',
                         lineHeight: 1.6,
-                        color: '#71717A',
+                        color: 'var(--text-secondary)',
                         maxWidth: '440px',
                         margin: '0 auto',
                         fontFamily: "'Inter', sans-serif",
@@ -146,7 +146,7 @@ export default function HowItWorks() {
                                     fontFamily: "'Outfit', sans-serif",
                                     fontWeight: 700,
                                     fontSize: '22px',
-                                    color: '#09090B',
+                                    color: 'var(--text-primary)',
                                     marginBottom: '10px',
                                 }}>
                                     {step.title}
@@ -154,7 +154,7 @@ export default function HowItWorks() {
                                 <p style={{
                                     fontSize: '15px',
                                     lineHeight: 1.65,
-                                    color: '#71717A',
+                                    color: 'var(--text-secondary)',
                                     fontFamily: "'Inter', sans-serif",
                                 }}>
                                     {step.description}

@@ -2,11 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import { usePathname } from 'next/navigation';
-
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
     const lenisRef = useRef<Lenis | null>(null);
-    const _pathname = usePathname();
 
     useEffect(() => {
         // Initialize Lenis smooth scroll
