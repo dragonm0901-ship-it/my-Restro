@@ -5,14 +5,20 @@ import { motion } from 'framer-motion';
 import {
     MagnifyingGlass as Search,
     ChefHat as ChefHat,
-    Fire as Flame
+    Fire as Flame,
+    CubeFocus
 } from '@phosphor-icons/react';
+import dynamic from 'next/dynamic';
 import { categories, menuItems } from '@/data/menuData';
 import { LogoIcon } from '@/components/Logo';
+
+// Dynamic import for Web Component compatibility (needs window)
+const ARViewer = dynamic(() => import('@/components/menu/ARViewer').then(mod => mod.ARViewer), { ssr: false });
 
 export default function CustomerMenuPage() {
     const [activeCategory, setActiveCategory] = useState('all');
     const [search, setSearch] = useState('');
+    const [arItem, setArItem] = useState<typeof menuItems[0] | null>(null);
 
     const filteredItems = useMemo(() => {
         let items = menuItems.filter((i) => i.is_available);
@@ -121,14 +127,26 @@ export default function CustomerMenuPage() {
                                                 <span className="text-[12px] font-bold" style={{ color: 'var(--text-primary)' }}>
                                                     Rs. {item.price}
                                                 </span>
-                                                {item.sizes && (
-                                                    <div className="flex gap-1">
-                                                        {item.sizes.map((s) => (
-                                                            <span key={s} className="text-[8px] px-1.5 py-0.5 rounded"
-                                                                style={{ background: 'var(--bg-input)', color: 'var(--text-muted)' }}>{s}</span>
-                                                        ))}
-                                                    </div>
-                                                )}
+                                                <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                                                    {item.id === 'momo-steam-buff' && (
+                                                        <button 
+                                                            onClick={() => setArItem(item)}
+                                                            className="flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full font-bold shadow-sm active:scale-95 transition-transform"
+                                                            style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}
+                                                        >
+                                                            <CubeFocus className="w-3 h-3" weight="fill" />
+                                                            View in AR <span className="opacity-70 font-normal">(Demo)</span>
+                                                        </button>
+                                                    )}
+                                                    {item.sizes && (
+                                                        <div className="flex gap-1">
+                                                            {item.sizes.map((s) => (
+                                                                <span key={s} className="text-[8px] px-1.5 py-0.5 rounded"
+                                                                    style={{ background: 'var(--bg-input)', color: 'var(--text-muted)' }}>{s}</span>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -149,6 +167,18 @@ export default function CustomerMenuPage() {
             <div className="text-center py-4 text-[9px]" style={{ color: 'var(--text-muted)' }}>
                 Powered by myRestro Manager
             </div>
+
+            {/* AR Modal Overlay */}
+            {arItem && (
+                <ARViewer 
+                    isOpen={!!arItem}
+                    onClose={() => setArItem(null)}
+                    modelSrc="https://modelviewer.dev/shared-assets/models/Astronaut.glb" // Astronaut placeholder until the user updates to Pizza
+                    itemName={arItem.name}
+                    itemPrice={arItem.price}
+                    itemDescription={arItem.description}
+                />
+            )}
         </div>
     );
 }
