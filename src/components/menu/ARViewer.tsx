@@ -20,16 +20,7 @@ interface ARViewerProps {
 
 export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemDescription }: ARViewerProps) {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [absoluteSrc, setAbsoluteSrc] = useState(modelSrc);
     const modelRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        if (modelSrc.startsWith('/')) {
-            setAbsoluteSrc(window.location.origin + modelSrc);
-        } else {
-            setAbsoluteSrc(modelSrc);
-        }
-    }, [modelSrc]);
 
     // Properly listen for model-viewer custom 'load' event
     useEffect(() => {
@@ -99,13 +90,12 @@ export function ARViewer({ isOpen, onClose, modelSrc, itemName, itemPrice, itemD
                                 {/* @ts-ignore - model-viewer is a custom element */}
                                 <model-viewer
                                     ref={modelRef}
-                                    src={absoluteSrc}
+                                    src={modelSrc}
                                     alt={`A 3D model of ${itemName}`}
                                     shadow-intensity="1"
                                     camera-controls
                                     auto-rotate
                                     ar
-                                    ar-modes="webxr scene-viewer quick-look"
                                     environment-image="neutral"
                                     style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
                                 >
