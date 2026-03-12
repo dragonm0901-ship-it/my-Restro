@@ -42,7 +42,7 @@ export default function CookiePolicyPage() {
                         <p className="text-gray-600 leading-relaxed">
                             You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). 
                             Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. 
-                            Specifically, if you disable strictly necessary cookies, you may not be able to log into the myRestro dashboard.
+                            Specifically, if you disable strictly necessary cookies, you may not be able to log into the myRestro Manager dashboard.
                         </p>
                     </section>
                 </div>

@@ -69,7 +69,7 @@ export default function Footer() {
                                 fontSize: '18px',
                                 color: 'var(--text-primary)',
                             }}>
-                                myRestro
+                                myRestro Manager
                             </span>
                         </Link>
                         <p style={{
@@ -127,12 +127,12 @@ export default function Footer() {
                         color: '#A1A1AA',
                         fontFamily: "'Inter', sans-serif",
                     }}>
-                        © {new Date().getFullYear()} myRestro. All rights reserved.
+                        © {new Date().getFullYear()} myRestro Manager. All rights reserved.
                     </p>
                     <div style={{ display: 'flex', gap: '24px' }}>
                         <a href="#" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>Twitter</a>
                         <a href="#" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>LinkedIn</a>
-                        <a href="https://github.com/luishidalgoa/myRestro" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>GitHub</a>
+                        <a href="https://github.com/luishidalgoa/myrestromanager" target="_blank" rel="noopener noreferrer" className="footer-link" style={{ fontSize: '13px' }}>GitHub</a>
                     </div>
                 </div>
             </div>

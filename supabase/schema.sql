@@ -1,4 +1,4 @@
--- myRestro Restaurant Management — Database Schema (Multi-Tenant)
+-- myRestro Manager Restaurant Management — Database Schema (Multi-Tenant)
 -- Run this in Supabase SQL Editor
 
 -- Enable UUID generation

@@ -74,7 +74,7 @@ export default function InteractiveDemo() {
                                     className="flex flex-col items-center"
                                 >
                                     <div className="p-6 rounded-3xl shadow-2xl mb-8 relative group" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-                                        <QRCodeSVG value="https://myrestro.com/demo" size={240} level="H" includeMargin={false} fgColor="var(--text-primary)" bgColor="transparent" />
+                                        <QRCodeSVG value="https://myrestromanager.com/demo" size={240} level="H" includeMargin={false} fgColor="var(--text-primary)" bgColor="transparent" />
                                         
                                         <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap shadow-xl flex items-center gap-2" style={{ background: 'var(--accent)', color: 'var(--accent-fg)', border: '1px solid var(--border)' }}>
                                             Table 12

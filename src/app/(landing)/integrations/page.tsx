@@ -5,7 +5,7 @@ export default function IntegrationsPage() {
                 <div className="text-center mb-16">
                     <h1 className="text-5xl font-bold font-['Outfit'] mb-6 tracking-tight">Integrations</h1>
                     <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-                        Connect myRestro with the tools you already use. From payments to accounting, we&apos;ve got you covered.
+                        Connect myRestro Manager with the tools you already use. From payments to accounting, we&apos;ve got you covered.
                     </p>
                 </div>
 

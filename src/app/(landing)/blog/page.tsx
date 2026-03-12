@@ -3,7 +3,7 @@ export default function BlogPage() {
         <div className="min-h-screen pt-32 pb-24" style={{ background: '#FAFAFA', color: '#09090B' }}>
             <div className="max-w-5xl mx-auto px-6">
                 <div className="mb-16">
-                    <h1 className="text-5xl font-bold font-['Outfit'] mb-6 tracking-tight">The myRestro Blog</h1>
+                    <h1 className="text-5xl font-bold font-['Outfit'] mb-6 tracking-tight">The myRestro Manager Blog</h1>
                     <p className="text-xl text-gray-500">
                         Insights, product updates, and strategies for restaurant growth.
                     </p>

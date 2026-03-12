@@ -4,7 +4,7 @@ export default function HelpCenterPage() {
             <div className="max-w-4xl mx-auto px-6 text-center">
                 <h1 className="text-5xl font-bold font-['Outfit'] mb-6 tracking-tight">Help Center</h1>
                 <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-16">
-                    Find answers to common questions and learn how to get the most out of myRestro.
+                    Find answers to common questions and learn how to get the most out of myRestro Manager.
                 </p>
 
                 <div className="max-w-xl mx-auto mb-16 relative">

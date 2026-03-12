@@ -10,7 +10,7 @@ export default function VideoExplainer() {
                     See It In Action
                 </h2>
                 <p className="text-lg max-w-2xl mx-auto font-['Inter'] mb-12" style={{ color: 'var(--text-secondary)' }}>
-                    Watch how myRestro synchronizes the entire dining experience from the moment a guest sits down to when the food arrives.
+                    Watch how myRestro Manager synchronizes the entire dining experience from the moment a guest sits down to when the food arrives.
                 </p>
 
                 {/* Video container */}

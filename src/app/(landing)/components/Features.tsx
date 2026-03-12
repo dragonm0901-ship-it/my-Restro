@@ -142,7 +142,7 @@ export default function Features() {
                     margin: '0 auto',
                     fontFamily: "'Inter', sans-serif",
                 }}>
-                    From menu creation to kitchen management, billing to analytics — myRestro replaces 6+ tools with one elegant platform.
+                    From menu creation to kitchen management, billing to analytics — myRestro Manager replaces 6+ tools with one elegant platform.
                 </p>
             </div>
 

@@ -51,7 +51,7 @@ function MenuPageInner() {
     const downloadQR = useCallback(() => {
         if (!qrDataUrl) return;
         const link = document.createElement('a');
-        link.download = 'myRestro-Menu-QR.png';
+        link.download = 'myrestromanager-Menu-QR.png';
         link.href = qrDataUrl;
         link.click();
     }, [qrDataUrl]);

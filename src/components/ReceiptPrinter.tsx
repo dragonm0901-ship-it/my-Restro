@@ -37,7 +37,7 @@ interface ReceiptPrinterProps {
  */
 export const ReceiptPrinter: React.FC<ReceiptPrinterProps> = ({
   order,
-  restaurantName = 'myRestro',
+  restaurantName = 'myRestro Manager',
   restaurantAddress = 'Kathmandu, Nepal',
   restaurantPhone = '+977-9800000000',
   vatNumber = '123456789'
@@ -195,7 +195,7 @@ export const ReceiptPrinter: React.FC<ReceiptPrinterProps> = ({
         {/* Footer */}
         <div className="receipt-footer">
           <p>Thank you for your visit!</p>
-          <p>Powered by myRestro</p>
+          <p>Powered by myRestro Manager</p>
         </div>
 
       </div>

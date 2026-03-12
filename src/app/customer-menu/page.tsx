@@ -59,7 +59,7 @@ export default function CustomerMenuPage() {
                         </div>
                         <div>
                             <h1 className="text-sm font-bold font-['Outfit']" style={{ color: 'var(--text-primary)' }}>
-                                myRestro
+                                myRestro Manager
                             </h1>
                             <p className="text-[9px]" style={{ color: 'var(--text-muted)' }}>Menu</p>
                         </div>

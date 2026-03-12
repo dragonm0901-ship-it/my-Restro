@@ -36,14 +36,14 @@ export default function ContactPage() {
                     <div className="flex flex-col justify-center">
                         <div className="mb-8">
                             <h3 className="text-lg font-bold mb-2">Sales Inquiries</h3>
-                            <p className="text-gray-500 text-sm mb-1">Interested in using myRestro for your restaurant?</p>
-                            <a href="mailto:sales@myrestro.com" className="text-sm font-bold text-blue-600 hover:underline">sales@myrestro.com</a>
+                            <p className="text-gray-500 text-sm mb-1">Interested in using myRestro Manager for your restaurant?</p>
+                            <a href="mailto:sales@myrestromanager.com" className="text-sm font-bold text-blue-600 hover:underline">sales@myrestromanager.com</a>
                         </div>
                         
                         <div className="mb-8">
                             <h3 className="text-lg font-bold mb-2">Technical Support</h3>
                             <p className="text-gray-500 text-sm mb-1">Need help with your current setup?</p>
-                            <a href="mailto:support@myrestro.com" className="text-sm font-bold text-blue-600 hover:underline">support@myrestro.com</a>
+                            <a href="mailto:support@myrestromanager.com" className="text-sm font-bold text-blue-600 hover:underline">support@myrestromanager.com</a>
                         </div>
 
                         <div>

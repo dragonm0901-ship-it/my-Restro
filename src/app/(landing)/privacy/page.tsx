@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">1. Introduction</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            Welcome to myRestro. We respect your privacy and are committed to protecting your personal data. 
+                            Welcome to myRestro Manager. We respect your privacy and are committed to protecting your personal data. 
                             This privacy policy will inform you as to how we look after your personal data when you visit our 
                             website and tell you about your privacy rights and how the law protects you.
                         </p>
@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            If you have any questions about this privacy policy or our privacy practices, please contact us at privacy@myrestro.com.
+                            If you have any questions about this privacy policy or our privacy practices, please contact us at privacy@myrestromanager.com.
                         </p>
                     </section>
                 </div>

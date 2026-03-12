@@ -74,7 +74,7 @@ export default function TablesPage() {
     const downloadQR = () => {
         if (!qrDataUrl) return;
         const link = document.createElement('a');
-        link.download = `myRestro-Table-${selectedTable?.id}-QR.png`;
+        link.download = `myrestromanager-Table-${selectedTable?.id}-QR.png`;
         link.href = qrDataUrl;
         link.click();
     };

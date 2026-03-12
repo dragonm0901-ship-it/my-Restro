@@ -108,7 +108,7 @@ export default function Gallery() {
                     margin: '0 auto',
                     fontFamily: "'Inter', sans-serif",
                 }}>
-                    From intimate cafés to multi-branch empires — myRestro adapts to every hospitality vision.
+                    From intimate cafés to multi-branch empires — myRestro Manager adapts to every hospitality vision.
                 </p>
             </div>
 

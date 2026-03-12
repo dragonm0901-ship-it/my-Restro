@@ -126,16 +126,16 @@ export default function Sidebar() {
     const renderSidebarContent = (isMobileContext: boolean) => (
         <div className="flex flex-col w-full h-full overflow-hidden">
             {/* Logo */}
-            <div className={`flex items-center h-[80px] shrink-0 justify-between ${collapsed && !isMobileContext ? 'justify-center w-full' : 'px-6'}`}>
-                <div className="flex items-center gap-3">
+            <div className={`flex items-center h-[80px] shrink-0 justify-between ${collapsed && !isMobileContext ? 'justify-center w-full' : 'px-5'}`}>
+                <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'var(--accent)' }}>
                         <LogoIcon size={20} className="text-(--accent-fg)" />
                     </div>
                     {(!collapsed || isMobileContext) && (
                         <span
-                            className="text-xl font-bold whitespace-nowrap overflow-hidden font-['Outfit']"
+                            className="text-[17px] font-bold whitespace-nowrap overflow-hidden text-ellipsis font-['Outfit'] tracking-tight pb-[2px]"
                             style={{ color: 'var(--text-primary)' }}
-                        >myRestro</span>
+                        >myRestro Manager</span>
                     )}
                 </div>
                 {isMobileContext && (
@@ -279,7 +279,7 @@ export default function Sidebar() {
             {/* Desktop Sidebar — always rendered, never removed from DOM */}
             <motion.div
                 animate={{ width: sidebarWidth }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                transition={{ type: 'tween', ease: [0.16, 1, 0.3, 1], duration: 0.5 }}
                 className="hidden lg:flex fixed left-0 top-0 h-screen z-40 overflow-visible flex-col"
                 style={{
                     background: 'var(--bg-secondary)',
@@ -313,7 +313,7 @@ export default function Sidebar() {
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                            transition={{ type: 'tween', ease: [0.16, 1, 0.3, 1], duration: 0.5 }}
                             className="fixed left-0 top-0 h-screen z-50 flex flex-col lg:hidden"
                             style={{
                                 width: '85%',

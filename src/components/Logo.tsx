@@ -1,6 +1,6 @@
 'use client';
 
-// Geometric "R" logo matching the myRestro brand identity
+// Geometric "R" logo matching the myRestro Manager brand identity
 // Based on the uploaded isometric wireframe R design
 export function LogoIcon({ size = 32, className = '', style }: { size?: number; className?: string; style?: React.CSSProperties }) {
     return (
@@ -24,7 +24,7 @@ export function LogoFull({ collapsed = false }: { collapsed?: boolean }) {
             {!collapsed && (
                 <span className="text-sm font-bold whitespace-nowrap overflow-hidden font-['Outfit']"
                     style={{ color: 'var(--text-primary)' }}>
-                    myRestro
+                    myRestro Manager
                 </span>
             )}
         </div>

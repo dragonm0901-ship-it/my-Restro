@@ -5,7 +5,7 @@ import { Providers } from '@/components/Providers';
 export const metadata: Metadata = {
   title: 'myRestro Manager — Manage your Restaurant Digitally',
   description: 'A premium digital restaurant management platform — orders, kitchen, billing, staff & more.',
-  keywords: ['restaurant', 'POS', 'order management', 'digital restaurant', 'kitchen display', 'myRestro'],
+  keywords: ['restaurant', 'POS', 'order management', 'digital restaurant', 'kitchen display', 'myRestro Manager'],
 };
 
 export default function RootLayout({

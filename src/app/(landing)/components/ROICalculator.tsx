@@ -29,7 +29,7 @@ export default function ROICalculator() {
                         Calculate Your ROI
                     </h2>
                     <p className="text-lg max-w-2xl mx-auto font-['Inter']" style={{ color: 'var(--text-secondary)' }}>
-                        Faster ordering means faster table turnover. See how much extra revenue your restaurant could generate simply by switching to myRestro.
+                        Faster ordering means faster table turnover. See how much extra revenue your restaurant could generate simply by switching to myRestro Manager.
                     </p>
                 </div>
 

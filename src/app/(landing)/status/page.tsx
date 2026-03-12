@@ -5,7 +5,7 @@ export default function StatusPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
                         <h1 className="text-4xl font-bold font-['Outfit'] tracking-tight">System Status</h1>
-                        <p className="text-gray-500 mt-2">Current status of myRestro services and APIs.</p>
+                        <p className="text-gray-500 mt-2">Current status of myRestro Manager services and APIs.</p>
                     </div>
                     <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full border border-green-200 font-medium">
                         <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>

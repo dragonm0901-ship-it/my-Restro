@@ -186,7 +186,7 @@ export default function Hero() {
                     }}>
                         <Image
                             src="/landing/hero-waitstaff.png"
-                            alt="Nepali waitstaff in a luxury villa using myRestro"
+                            alt="Nepali waitstaff in a luxury villa using myRestro Manager"
                             fill
                             priority
                             style={{

@@ -8,7 +8,7 @@ const testimonials = [
     {
         name: "Suresh Thapa",
         role: "Owner, The Himalayan Villa",
-        content: "myRestro completely transformed how we handle peak hours. The KDS keeps the kitchen calm, and our table turnover has never been faster. It's the best investment we've made this year.",
+        content: "myRestro Manager completely transformed how we handle peak hours. The KDS keeps the kitchen calm, and our table turnover has never been faster. It's the best investment we've made this year.",
         rating: 5.0,
     },
     {
@@ -71,7 +71,7 @@ export default function Testimonials() {
                         Loved by Restaurant Teams
                     </h2>
                     <p className="text-lg max-w-2xl mx-auto font-['Inter']" style={{ color: 'var(--text-secondary)' }}>
-                        Don&apos;t just take our word for it. Here is what owners, chefs, and managers are saying about their experience with myRestro.
+                        Don&apos;t just take our word for it. Here is what owners, chefs, and managers are saying about their experience with myRestro Manager.
                     </p>
                 </div>
 

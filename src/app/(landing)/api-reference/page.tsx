@@ -6,7 +6,7 @@ export default function ApiReferencePlaceholder() {
                     {"API"}
                 </div>
                 <h1 className="text-3xl font-bold font-['Outfit'] mb-4">API Reference</h1>
-                <p className="text-gray-500 mb-8">Full REST and GraphQL API references for integrating myRestro with third-party systems are available upon request for Enterprise customers.</p>
+                <p className="text-gray-500 mb-8">Full REST and GraphQL API references for integrating myRestro Manager with third-party systems are available upon request for Enterprise customers.</p>
                 <a href="/contact" className="inline-block bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors">
                     Contact Sales
                 </a>

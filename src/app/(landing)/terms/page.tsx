@@ -9,7 +9,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">1. Agreement to Terms</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            By accessing or using the myRestro service, you agree to be bound by these Terms of Service. 
+                            By accessing or using the myRestro Manager service, you agree to be bound by these Terms of Service. 
                             If you disagree with any part of the terms, then you do not have permission to access the Service.
                         </p>
                     </section>
@@ -17,7 +17,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">2. Description of Service</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            myRestro provides a digital restaurant management platform including point of sale, 
+                            myRestro Manager provides a digital restaurant management platform including point of sale, 
                             kitchen display systems, digital order menus, and administrative dashboards. 
                             The service operates as a Software as a Service (SaaS).
                         </p>
@@ -49,7 +49,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">5. Data and Intellectual Property</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            The Service and its original content (excluding Content provided by you), features and functionality are and will remain the exclusive property of myRestro and its licensors.
+                            The Service and its original content (excluding Content provided by you), features and functionality are and will remain the exclusive property of myRestro Manager and its licensors.
                             You retain all rights to the menu and customer data you input into the Service.
                         </p>
                     </section>
@@ -57,7 +57,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">6. Limitation of Liability</h2>
                         <p className="text-gray-600 leading-relaxed">
-                            In no event shall myRestro, nor its directors, employees, partners, agents, suppliers, or affiliates, 
+                            In no event shall myRestro Manager, nor its directors, employees, partners, agents, suppliers, or affiliates, 
                             be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, 
                             loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
                         </p>

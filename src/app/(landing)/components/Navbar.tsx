@@ -18,7 +18,7 @@ export default function Navbar() {
         };
         window.addEventListener('scroll', handleScroll);
         
-        const savedTheme = localStorage.getItem('myRestro-theme') as ThemeMode || 'system';
+        const savedTheme = localStorage.getItem('myrestromanager-theme') as ThemeMode || 'system';
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTheme(savedTheme);
         
@@ -41,7 +41,7 @@ export default function Navbar() {
         // Listen for system theme changes if using 'system'
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         const handleChange = () => {
-             if (localStorage.getItem('myRestro-theme') === 'system' || !localStorage.getItem('myRestro-theme')) {
+             if (localStorage.getItem('myrestromanager-theme') === 'system' || !localStorage.getItem('myrestromanager-theme')) {
                  applyTheme('system');
              }
         };
@@ -60,7 +60,7 @@ export default function Navbar() {
         };
         const newTheme = nextTheme[theme];
         setTheme(newTheme);
-        localStorage.setItem('myRestro-theme', newTheme);
+        localStorage.setItem('myrestromanager-theme', newTheme);
         
         const root = document.querySelector('.landing-root');
         if (!root) return;
@@ -113,7 +113,7 @@ export default function Navbar() {
                         color: 'var(--text-primary)',
                         letterSpacing: '-0.02em',
                     }}>
-                        myRestro
+                        myRestro Manager
                     </span>
                 </Link>
 

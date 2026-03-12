@@ -76,7 +76,7 @@ export default function CTABanner() {
                     position: 'relative',
                     zIndex: 1,
                 }}>
-                    Join 200+ restaurants already using myRestro. No credit card required. Cancel anytime.
+                    Join 200+ restaurants already using myRestro Manager. No credit card required. Cancel anytime.
                 </p>
 
                 <div style={{
