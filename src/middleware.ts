@@ -52,9 +52,13 @@ export async function middleware(request: NextRequest) {
         }
     );
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    let user = null;
+    try {
+        const { data } = await supabase.auth.getUser();
+        user = data.user;
+    } catch (err) {
+        // Ignored: Typically "Invalid Refresh Token" when session expires
+    }
 
     const url = request.nextUrl.clone();
     

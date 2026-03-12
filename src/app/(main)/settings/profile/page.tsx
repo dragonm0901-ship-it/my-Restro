@@ -16,9 +16,9 @@ export default function ProfileSettingsPage() {
         setIsSaving(true);
         try {
             const supabase = createClient();
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-            if (!user) {
+            if (!user || authError) {
                 toast.error('Not authenticated');
                 return;
             }
