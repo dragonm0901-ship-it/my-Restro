@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase';
 import { useOrdersStore, KitchenOrder } from '@/stores/useOrdersStore';
 import { useRoleStore } from '@/stores/useRoleStore';
+import { useNetworkState } from 'react-use';
 
 type OrderItemJoin = {
     quantity: number;
@@ -31,12 +32,13 @@ export function useRealtimeOrders() {
     const { restaurantId } = useRoleStore();
     const { setOrders, updateOrderStatusLocal, addOrderLocal } = useOrdersStore();
     const supabase = createClient();
+    const { online } = useNetworkState(); // Track network state
 
     useEffect(() => {
         if (!restaurantId) return;
 
-        // 1. Fetch initial orders for the active restaurant
-        const fetchInitialOrders = async () => {
+        // 1. Fetch orders for the active restaurant
+        const fetchOrders = async () => {
             const { data, error } = await supabase
                 .from('orders')
                 .select(`
@@ -78,7 +80,12 @@ export function useRealtimeOrders() {
             }
         };
 
-        fetchInitialOrders();
+        fetchOrders();
+
+        // Fallback polling: if web socket dies, we still want to fetch
+        const pollInterval = setInterval(() => {
+            fetchOrders();
+        }, online ? 60000 : 15000); // 1m when online (safety), 15s when offline
 
         // 2. Subscribe to Realtime changes on the 'orders' table for this restaurant
         const channel = supabase.channel('kitchen_orders')
@@ -118,18 +125,24 @@ export function useRealtimeOrders() {
                                         image_url: oi.menu_item?.image || '',
                                     },
                                     quantity: oi.quantity,
-                                })),
+                                }),
+                                ),
                                 specialNotes: (data.order_items || []).map((oi: OrderItemJoin) => oi.notes).filter(Boolean).join('. ') || '',
                                 status: data.status as KitchenOrder['status'],
                                 total: data.total || 0,
                                 createdAt: data.created_at,
                                 waiterName: data.type,
                             };
-                            addOrderLocal(newOrder);
-                            toast.success(`New order for Table ${newOrder.tableNumber}!`, {
-                                icon: '🔔',
-                                duration: 5000,
-                            });
+                            
+                            // Check if we already have it to avoid duplicates
+                            const currentOrders = useOrdersStore.getState().orders;
+                            if (!currentOrders.some(o => o.id === newOrder.id)) {
+                                addOrderLocal(newOrder);
+                                toast.success(`New order for Table ${newOrder.tableNumber}!`, {
+                                    icon: '🔔',
+                                    duration: 5000,
+                                });
+                            }
                         }
                     }, 1000);
                 }
@@ -157,7 +170,10 @@ export function useRealtimeOrders() {
             .subscribe();
 
         return () => {
+            clearInterval(pollInterval);
             supabase.removeChannel(channel);
         };
-    }, [restaurantId, setOrders, updateOrderStatusLocal, addOrderLocal, supabase]);
+    }, [restaurantId, setOrders, updateOrderStatusLocal, addOrderLocal, supabase, online]);
+
+    return { isOnline: online };
 }

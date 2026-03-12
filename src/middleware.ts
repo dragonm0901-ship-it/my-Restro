@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     let supabaseResponse = NextResponse.next({
         request,
     });
@@ -77,15 +77,27 @@ export async function proxy(request: NextRequest) {
             .from('profiles')
             .select('role')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
-        const role = profile?.role;
+        let role = profile?.role;
+        const isDemoOwner = user.email === 'demo.owner@example.com';
         const isDemoChef = user.email === 'demo.chef@example.com';
+        const isDemoWaiter = user.email === 'demo.waiter@example.com';
+
+        if (!role) {
+            if (isDemoOwner) role = 'owner';
+            else if (isDemoChef) role = 'chef';
+            else if (isDemoWaiter) role = 'waiter';
+        }
         
-        // Only admins can access settings
-        if (url.pathname.startsWith('/settings') && role !== 'admin') {
-            url.pathname = (role === 'kitchen' || role === 'chef' || isDemoChef) ? '/kds' : '/tables';
-            return NextResponse.redirect(url);
+        // Only admins, owners, and managers can access settings. Waiters can access profile but not floorplan/billing
+        if (url.pathname.startsWith('/settings')) {
+            const isSettingsAdminRoute = url.pathname.startsWith('/settings/floorplan') || url.pathname.startsWith('/settings/billing');
+            
+            if (isSettingsAdminRoute && !['admin', 'owner', 'manager'].includes(role || '')) {
+                url.pathname = (role === 'kitchen' || role === 'chef' || isDemoChef) ? '/kds' : '/tables';
+                return NextResponse.redirect(url);
+            }
         }
     }
 

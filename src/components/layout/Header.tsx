@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     MagnifyingGlass as Search,
@@ -189,8 +190,8 @@ export default function Header({ onCartToggle, cartRef }: HeaderProps) {
                     )}
 
                     {/* Profile */}
-                    <div className="flex items-center gap-3 py-1 pl-2 pr-2 cursor-pointer ml-2">
-                        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border" style={{ borderColor: 'var(--border)' }}>
+                    <Link href="/settings/profile" className="flex items-center gap-3 py-1 pl-2 pr-2 cursor-pointer ml-2 hover:opacity-80 transition-opacity">
+                        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border transition-colors hover:border-gray-400" style={{ borderColor: 'var(--border)' }}>
                             <div className="w-full h-full flex items-center justify-center" style={{ background: 'var(--bg-elevated)' }}>
                                 <User className="w-5 h-5" weight="fill" style={{ color: 'var(--text-secondary)' }} />
                             </div>
@@ -201,7 +202,7 @@ export default function Header({ onCartToggle, cartRef }: HeaderProps) {
                                 {role === 'owner' ? 'Sales Admin' : role ? role : 'Sales Admin'}
                             </span>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </header>

@@ -8,6 +8,7 @@ import { useThemeStore } from '@/stores/useThemeStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useRoleStore } from '@/stores/useRoleStore';
 import { useSubscriptionStore } from '@/stores/useSubscriptionStore';
+import { useSync } from '@/hooks/useSync';
 
 export default function MainLayout({
     children,
@@ -20,6 +21,7 @@ export default function MainLayout({
     const collapsed = useSidebarStore((s) => s.collapsed);
     const { restaurantId } = useRoleStore();
     const { fetchSubscription } = useSubscriptionStore();
+    const { syncDown } = useSync();
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -28,8 +30,9 @@ export default function MainLayout({
     useEffect(() => {
         if (restaurantId) {
             fetchSubscription(restaurantId);
+            syncDown();
         }
-    }, [restaurantId, fetchSubscription]);
+    }, [restaurantId, fetchSubscription, syncDown]);
 
     return (
         <div className="flex min-h-screen max-w-[100vw] overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>

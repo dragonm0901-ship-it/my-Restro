@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Clock as Clock,
@@ -26,13 +26,36 @@ const statusConfig: Record<KitchenOrder['status'], { label: string; color: strin
 
 const statusFlow: KitchenOrder['status'][] = ['pending', 'preparing', 'ready', 'completed'];
 
+function playBeep() {
+    try {
+        const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 880; // A5
+        gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        oscillator.start();
+        setTimeout(() => oscillator.stop(), 300);
+    } catch (e) { console.error('Audio beep failed', e); }
+}
+
 export default function KitchenPage() {
-    useRealtimeOrders(); // Mount WebSockets listener
+    const { isOnline } = useRealtimeOrders(); // Mount WebSockets listener
     const { orders, updateOrderStatus, removeOrder } = useOrdersStore();
     const [filter, setFilter] = useState<'all' | KitchenOrder['status']>('all');
 
     const filteredOrders = filter === 'all' ? orders : orders.filter((o) => o.status === filter);
     const activeOrders = orders.filter((o) => o.status !== 'completed');
+
+    const prevCountRef = useRef(activeOrders.length);
+    useEffect(() => {
+        if (activeOrders.length > prevCountRef.current) {
+            playBeep();
+        }
+        prevCountRef.current = activeOrders.length;
+    }, [activeOrders.length]);
 
     const advanceStatus = (order: KitchenOrder) => {
         const idx = statusFlow.indexOf(order.status);
@@ -52,6 +75,15 @@ export default function KitchenPage() {
 
     return (
         <div className="space-y-6 page-enter pb-8">
+            {!isOnline && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl flex items-center gap-3 mb-4">
+                    <AlertCircle className="w-5 h-5" weight="fill" />
+                    <div>
+                        <p className="text-sm font-bold">Offline Mode</p>
+                        <p className="text-xs">Live updates paused. Polling every 15s for new orders.</p>
+                    </div>
+                </div>
+            )}
             <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>Kitchen Display</h1>

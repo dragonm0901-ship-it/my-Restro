@@ -17,8 +17,27 @@ export interface LocalMenuItem {
   price: number;
   type: string; // 'food' | 'beverage' | 'other'
   image: string | null;
-  stock: number;
   is_available: boolean;
+}
+
+export interface LocalTable {
+  id: string;
+  table_number: string;
+  capacity: number;
+  status: string;
+}
+
+export interface LocalHotelRoom {
+  id: string;
+  room_number: string;
+  status: string;
+}
+
+export interface LocalIngredient {
+  id: string;
+  name: string;
+  unit: string;
+  current_stock: number;
 }
 
 export interface SyncQueueOrder {
@@ -50,6 +69,9 @@ export class RestaurantLocalDB extends Dexie {
   // Define tables
   categories!: Table<LocalCategory, string>;
   menu_items!: Table<LocalMenuItem, string>;
+  restaurant_tables!: Table<LocalTable, string>;
+  hotel_rooms!: Table<LocalHotelRoom, string>;
+  ingredients!: Table<LocalIngredient, string>;
   sync_queue!: Table<SyncQueueOrder, number>;
 
   constructor() {
@@ -58,9 +80,12 @@ export class RestaurantLocalDB extends Dexie {
     // Define schema
     // ++id means auto-incrementing primary key
     // Other keys mentioned are indexed
-    this.version(1).stores({
+    this.version(2).stores({
       categories: 'id, sort_order',
       menu_items: 'id, category_id, type',
+      restaurant_tables: 'id, status',
+      hotel_rooms: 'id, status',
+      ingredients: 'id',
       sync_queue: '++local_id, sync_status, created_at'
     });
   }

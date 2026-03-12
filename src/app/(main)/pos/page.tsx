@@ -18,6 +18,7 @@ import {
     Storefront,
     Motorcycle,
     Armchair,
+    Bed,
 } from '@phosphor-icons/react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { localDb } from '@/lib/db/localDb';
@@ -25,8 +26,10 @@ import { useSync } from '@/hooks/useSync';
 import toast from 'react-hot-toast';
 import { PrintOrder } from '@/components/ReceiptPrinter';
 import { printReceipt, printKOT } from '@/lib/printUtils';
+import { ManagerPinModal } from '@/components/ManagerPinModal';
+import { CheckoutModal } from '@/components/CheckoutModal';
 
-type OrderType = 'Dine-In' | 'Takeaway' | 'Delivery';
+type OrderType = 'Dine-In' | 'Takeaway' | 'Delivery' | 'Room-Service';
 type CartItem = { id: string; name: string; price: number; quantity: number; type: string };
 
 export default function POSPage() {
@@ -34,15 +37,25 @@ export default function POSPage() {
     const [activeCategory, setActiveCategory] = useState<string>('All');
     const [orderType, setOrderType] = useState<OrderType>('Dine-In');
     const [cart, setCart] = useState<CartItem[]>([]);
-    const [selectedTable] = useState<string>('Select Table');
+    
+    // Selection state
+    const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
+    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+    
     const [isMenuList, setIsMenuList] = useState(false); // Grid vs List view
     const [isProcessing, setIsProcessing] = useState(false);
     const [kotNumber, setKotNumber] = useState(1); // Mock KOT auto-increment
+
+    const [showPinModal, setShowPinModal] = useState(false);
+    const [pendingItemToRemove, setPendingItemToRemove] = useState<string | null>(null);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
     const { enqueueOrder } = useSync();
 
     const categories = useLiveQuery(() => localDb.categories.orderBy('sort_order').toArray()) || [];
     const menuItems = useLiveQuery(() => localDb.menu_items.toArray()) || [];
+    const tables = useLiveQuery(() => localDb.restaurant_tables.toArray()) || [];
+    const rooms = useLiveQuery(() => localDb.hotel_rooms.toArray()) || [];
 
 
     const filteredItems = menuItems.filter(item =>
@@ -74,6 +87,19 @@ export default function POSPage() {
         setCart(prev => prev.filter(item => item.id !== id));
     };
 
+    const initiateRemoveItem = (id: string) => {
+        setPendingItemToRemove(id);
+        setShowPinModal(true);
+    };
+
+    const handlePinSuccess = () => {
+        if (pendingItemToRemove) {
+            removeItem(pendingItemToRemove);
+        }
+        setShowPinModal(false);
+        setPendingItemToRemove(null);
+    };
+
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const tax = subtotal * 0.13; // 13% VAT
     const discount = 0; // Hook up dynamic pricing here if happy hour
@@ -82,18 +108,29 @@ export default function POSPage() {
     const itemsForKOT = cart.filter(i => i.type === 'food').length;
     const itemsForBOT = cart.filter(i => i.type === 'beverage').length;
 
-    const handleCheckout = async () => {
+    const initiateCheckout = () => {
         if (cart.length === 0) return;
+        setShowCheckoutModal(true);
+    };
+
+    const handleConfirmOrder = async (method: 'cash' | 'card' | 'room_charge', tendered?: number) => {
         setIsProcessing(true);
         try {
+            const table = tables.find(t => t.id === selectedTableId);
+            const room = rooms.find(r => r.id === selectedRoomId);
+            
             const newOrderPayload = {
                 type: orderType,
                 status: 'pending' as const,
-                table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+                table_id: selectedTableId,
+                room_id: selectedRoomId,
+                table_number: table?.table_number,  // Optional depending on if we still need raw string somewhere
                 subtotal,
                 tax,
                 discount,
                 total,
+                payment_method: method,
+                amount_tendered: tendered,
                 items: cart.map(item => ({
                     menu_item_id: item.id,
                     quantity: item.quantity,
@@ -101,13 +138,14 @@ export default function POSPage() {
                 }))
             };
             
-            const localId = await enqueueOrder(newOrderPayload);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const localId = await enqueueOrder(newOrderPayload as any);
             
             // Generate print payload for the receipt printer
             const printPayload: PrintOrder = {
                 id: localId.toString(),
                 type: orderType,
-                table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+                table_number: table?.table_number || room?.room_number || undefined,
                 items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
                 subtotal, tax, discount, total,
                 date: new Date()
@@ -116,6 +154,9 @@ export default function POSPage() {
             toast.success('Order placed!');
             setCart([]);
             setOrderType('Dine-In');
+            setSelectedTableId(null);
+            setSelectedRoomId(null);
+            setShowCheckoutModal(false);
             
             // Trigger print automatically
             printReceipt(printPayload);
@@ -134,10 +175,13 @@ export default function POSPage() {
         }
         
         // Mock print payload just for KOT
+        const table = tables.find(t => t.id === selectedTableId);
+        const room = rooms.find(r => r.id === selectedRoomId);
+        
         const printPayload: PrintOrder = {
             id: 'KOT',
             type: orderType,
-            table_number: selectedTable !== 'Select Table' ? selectedTable : undefined,
+            table_number: table?.table_number || room?.room_number || undefined,
             items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
             subtotal, tax, discount, total,
             date: new Date()
@@ -236,9 +280,6 @@ export default function POSPage() {
                                                 <span className="text-2xl opacity-30">🍽️</span>
                                             </div>
                                         )}
-                                        <div className="absolute top-2 right-2 backdrop-blur-sm px-2 py-1 rounded border border-white/10" style={{ background: 'var(--bg-card)' }}>
-                                            <span className="text-[10px] font-bold" style={{ color: 'var(--text-primary)' }}>Stock: {item.stock}</span>
-                                        </div>
                                     </div>
                                     <div className={`px-1 flex flex-col ${isMenuList ? 'flex-1 min-w-0 justify-center' : ''}`}>
                                         <h3 className="text-sm font-bold truncate leading-tight mb-1" style={{ color: 'var(--text-primary)' }}>{item.name}</h3>
@@ -266,7 +307,8 @@ export default function POSPage() {
                         {[
                             { id: 'Dine-In', icon: Armchair },
                             { id: 'Takeaway', icon: Storefront },
-                            { id: 'Delivery', icon: Motorcycle }
+                            { id: 'Delivery', icon: Motorcycle },
+                            { id: 'Room-Service', icon: Bed }
                         ].map(type => (
                             <button
                                 key={type.id}
@@ -296,10 +338,31 @@ export default function POSPage() {
                         </button>
 
                         {orderType === 'Dine-In' && (
-                            <button className="flex-1 flex items-center justify-between p-3 rounded-xl border transition-colors shadow-sm hover:opacity-80" style={{ borderColor: 'var(--border)', background: 'var(--accent)', color: 'var(--accent-fg)' }}>
-                                <span className="text-xs font-bold">{selectedTable}</span>
-                                <CaretDown className="w-3 h-3 opacity-60" strokeWidth={3} />
-                            </button>
+                            <div className="flex-1 flex items-center justify-between p-3 rounded-xl border transition-colors shadow-sm hover:opacity-80 relative" style={{ borderColor: 'var(--border)', background: 'var(--accent)', color: 'var(--accent-fg)' }}>
+                                <select 
+                                    className="bg-transparent outline-none w-full appearance-none text-xs font-bold cursor-pointer pr-4"
+                                    value={selectedTableId || ''}
+                                    onChange={(e) => setSelectedTableId(e.target.value)}
+                                >
+                                    <option value="" disabled>Select Table</option>
+                                    {tables.map(t => <option key={t.id} value={t.id}>Table {t.table_number}</option>)}
+                                </select>
+                                <CaretDown className="w-3 h-3 opacity-60 pointer-events-none absolute right-3" strokeWidth={3} />
+                            </div>
+                        )}
+                        
+                        {orderType === 'Room-Service' && (
+                            <div className="flex-1 flex items-center justify-between p-3 rounded-xl border transition-colors shadow-sm hover:opacity-80 relative" style={{ borderColor: 'var(--border)', background: 'var(--accent)', color: 'var(--accent-fg)' }}>
+                                <select 
+                                    className="bg-transparent outline-none w-full appearance-none text-xs font-bold cursor-pointer pr-4"
+                                    value={selectedRoomId || ''}
+                                    onChange={(e) => setSelectedRoomId(e.target.value)}
+                                >
+                                    <option value="" disabled>Select Room</option>
+                                    {rooms.map(r => <option key={r.id} value={r.id}>Room {r.room_number}</option>)}
+                                </select>
+                                <CaretDown className="w-3 h-3 opacity-60 pointer-events-none absolute right-3" strokeWidth={3} />
+                            </div>
                         )}
                     </div>
                 </div>
@@ -334,7 +397,7 @@ export default function POSPage() {
                                         <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 rounded-sm flex items-center justify-center transition-colors hover:opacity-80" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
                                             <Plus className="w-3 h-3 w-bold" />
                                         </button>
-                                        <button onClick={() => removeItem(item.id)} className="w-7 h-7 rounded-md flex items-center justify-center ml-1 text-red-400 hover:bg-red-50 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                                        <button onClick={() => initiateRemoveItem(item.id)} className="w-7 h-7 rounded-md flex items-center justify-center ml-1 text-red-400 hover:bg-red-50 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
                                             <Trash className="w-4 h-4" />
                                         </button>
                                     </div>
@@ -389,8 +452,8 @@ export default function POSPage() {
                             <span className="text-[9px] sm:text-[10px] font-bold truncate px-1 max-w-full">Print KOT</span>
                         </button>
                         <button 
-                            disabled={isProcessing}
-                            onClick={handleCheckout}
+                            disabled={isProcessing || cart.length === 0}
+                            onClick={initiateCheckout}
                             className="flex-[1.5] sm:flex-2 min-w-0 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl shadow-lg transition-transform active:scale-[0.98] disabled:opacity-50" 
                             style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}
                         >
@@ -401,8 +464,24 @@ export default function POSPage() {
                         </button>
                     </div>
                 </div>
-
             </div>
+
+            <ManagerPinModal 
+                isOpen={showPinModal} 
+                onClose={() => {
+                    setShowPinModal(false);
+                    setPendingItemToRemove(null);
+                }} 
+                onSuccess={handlePinSuccess} 
+            />
+
+            <CheckoutModal
+                isOpen={showCheckoutModal}
+                onClose={() => setShowCheckoutModal(false)}
+                total={total}
+                onConfirm={handleConfirmOrder}
+                isProcessing={isProcessing}
+            />
         </div>
     );
 }

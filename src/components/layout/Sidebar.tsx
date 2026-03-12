@@ -107,7 +107,7 @@ export default function Sidebar() {
     };
 
     const isGroupActive = (group: NavGroup) => {
-        if (group.href) return pathname === group.href;
+        if (group.href) return pathname === group.href || pathname.startsWith(group.href + '/');
         return group.children?.some((c) => pathname === c.href || pathname.startsWith(c.href + '/')) || false;
     };
 

@@ -3,7 +3,7 @@ import React from 'react';
 // Define the shape of an Order that the printer expects
 export interface PrintOrder {
   id: string; // The order ID (even local)
-  type: 'Dine-In' | 'Takeaway' | 'Delivery';
+  type: 'Dine-In' | 'Takeaway' | 'Delivery' | 'Room-Service';
   table_number?: string;
   customer_info?: Record<string, unknown>;
   items: Array<{

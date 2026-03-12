@@ -22,7 +22,7 @@ function BillingContent() {
     const [loadingPlans, setLoadingPlans] = useState(true);
     const [submitting, setSubmitting] = useState<string | null>(null);
 
-    const supabase = createClient();
+    const supabaseRef = createClient();
 
     useEffect(() => {
         const status = searchParams.get('status');
@@ -37,7 +37,7 @@ function BillingContent() {
         }
 
         const fetchPlans = async () => {
-            const { data, error } = await supabase.from('subscription_plans').select('*').order('price_npr', { ascending: true });
+            const { data, error } = await supabaseRef.from('subscription_plans').select('*').order('price_npr', { ascending: true });
             if (data) setPlans(data);
             if (error) {
                 if (error.code !== '42P01' && Object.keys(error).length > 0) {
@@ -48,7 +48,8 @@ function BillingContent() {
         };
 
         fetchPlans();
-    }, [searchParams, supabase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams]);
 
     const handleEsewaPayment = async (plan: Plan) => {
         if (!restaurantId) return toast.error("No restaurant linked.");

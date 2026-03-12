@@ -28,8 +28,24 @@ export function useSync() {
       if (!menuErr && menuData) {
         await localDb.menu_items.bulkPut(menuData);
       }
+
+      const { data: tablesData, error: tablesErr } = await supabase.from('tables').select('*').eq('restaurant_id', restaurantId);
+      if (!tablesErr && tablesData) {
+        await localDb.restaurant_tables.bulkPut(tablesData);
+      }
+
+      const { data: roomsData, error: roomsErr } = await supabase.from('hotel_rooms').select('*').eq('restaurant_id', restaurantId);
+      if (!roomsErr && roomsData) {
+        await localDb.hotel_rooms.bulkPut(roomsData);
+      }
+
+      const { data: ingredientsData, error: ingredientsErr } = await supabase.from('ingredients').select('*').eq('restaurant_id', restaurantId);
+      if (!ingredientsErr && ingredientsData) {
+        await localDb.ingredients.bulkPut(ingredientsData);
+      }
+
     } catch (error) {
-      console.error('Failed to sync down inventory:', error);
+      console.error('Failed to sync down inventory and locations:', error);
     }
   }, [online, supabase, restaurantId]);
 
@@ -57,12 +73,13 @@ export function useSync() {
       for (const queueOrder of pendingOrders) {
         try {
           // Destructure out the local_id and items to insert order header
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { local_id, items, sync_status: _syncStatus, error_message: _errMsg, ...orderData } = queueOrder;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { local_id, items, payment_method, amount_tendered, sync_status: _syncStatus, error_message: _errMsg, ...orderData } = queueOrder as any; // eslint-disable-line @typescript-eslint/no-unused-vars
           
           // Needs valid restaurant_id
           const payload = {
             ...orderData,
+            payment_status: payment_method ? (payment_method === 'room_charge' ? 'charged_to_room' : 'paid') : 'unpaid',
             restaurant_id: restaurantId, 
           };
 
@@ -77,7 +94,8 @@ export function useSync() {
 
           // Insert Order Items
           if (newOrder && items.length > 0) {
-            const orderItemsPayload = items.map(item => ({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const orderItemsPayload = items.map((item: any) => ({
               ...item,
               order_id: newOrder.id,
             }));
@@ -87,6 +105,19 @@ export function useSync() {
               .insert(orderItemsPayload);
 
             if (itemsErr) throw itemsErr;
+          }
+
+          // Insert Transaction if there was a payment method
+          if (newOrder && payment_method && amount_tendered) {
+             const transactionPayload = {
+                 restaurant_id: restaurantId,
+                 order_id: newOrder.id,
+                 payment_method: payment_method,
+                 amount: amount_tendered,
+                 status: 'completed'
+             };
+             const { error: txErr } = await supabase.from('transactions').insert(transactionPayload);
+             if (txErr) console.error("Failed to insert transaction details:", txErr);
           }
 
           // Mark as synced locally
@@ -149,6 +180,7 @@ export function useSync() {
     isSyncing,
     pendingCount,
     enqueueOrder,
-    forceSync: syncUp
+    forceSync: syncUp,
+    syncDown
   };
 }
