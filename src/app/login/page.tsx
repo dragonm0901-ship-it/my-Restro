@@ -53,8 +53,8 @@ export default function LoginPage() {
 
                 if (authError) throw authError;
 
-                if (authData.user) {
-                    // 2. Call the RPC function to create the restaurant and link the user
+                if (authData.session) {
+                    // Have a live session, create restaurant immediately
                     const { error: rpcError } = await supabase.rpc('create_restaurant_and_link', {
                         restaurant_name: form.restaurantName
                     });
@@ -63,6 +63,14 @@ export default function LoginPage() {
 
                     toast.success('Restaurant created successfully! Welcome owner.');
                     router.push('/dashboard');
+                } else if (authData.user) {
+                    // No session means they need to verify email, but we also lost the restaurant_name...
+                    // Let's store it in local storage so that when they finally log in, we can create it
+                    if (typeof window !== 'undefined') {
+                        localStorage.setItem('pending_restaurant_name', form.restaurantName);
+                    }
+                    toast.success('Account created! Please check your email to verify before logging in.');
+                    setMode('signin');
                 }
 
             } else {
@@ -84,8 +92,33 @@ export default function LoginPage() {
                     .eq('id', data.user.id)
                     .maybeSingle();
 
+                // Check if they had a pending restaurant to create from a verified-email signup
+                let finalRestaurantId = profile?.restaurant_id;
+                
+                if (!finalRestaurantId && selectedRole === 'owner') {
+                    const pendingRestro = typeof window !== 'undefined' ? localStorage.getItem('pending_restaurant_name') : null;
+                    if (pendingRestro) {
+                        const { error: rpcError } = await supabase.rpc('create_restaurant_and_link', {
+                            restaurant_name: pendingRestro
+                        });
+                        
+                        if (!rpcError) {
+                            if (typeof window !== 'undefined') localStorage.removeItem('pending_restaurant_name');
+                            toast.success(`Restaurant "${pendingRestro}" created!`);
+                            
+                            // Re-fetch profile
+                            const { data: newProfile } = await supabase.from('profiles').select('restaurant_id').eq('id', data.user.id).maybeSingle();
+                            finalRestaurantId = newProfile?.restaurant_id;
+                        } else {
+                            toast.error("Failed to create restaurant. Please try setting it up again.");
+                        }
+                    } else {
+                        // Edge case: logged in as owner but no restaurant. Should ideally redirect to an onboarding screen.
+                    }
+                }
+
                 // Set role in store based on selection
-                setRole(selectedRole, data.user?.user_metadata?.full_name || undefined, profile?.restaurant_id);
+                setRole(selectedRole, data.user?.user_metadata?.full_name || undefined, finalRestaurantId);
 
                 toast.success('Welcome back!');
                 // Route them based on their profile role
