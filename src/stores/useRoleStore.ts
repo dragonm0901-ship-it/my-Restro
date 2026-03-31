@@ -7,7 +7,9 @@ interface RoleState {
     role: UserRole | null;
     userName: string;
     restaurantId?: string;
-    setRole: (role: UserRole, name?: string, restaurantId?: string) => void;
+    isDemo: boolean;
+    setRole: (role: UserRole, name?: string, restaurant_id?: string) => void;
+    setDemo: (role: UserRole) => void;
     logout: () => void;
 }
 
@@ -26,8 +28,19 @@ export const useRoleStore = create<RoleState>()(
             role: null,
             userName: '',
             restaurantId: undefined,
-            setRole: (role, name, restaurantId) => set({ role, userName: name || defaultNames[role], restaurantId }),
-            logout: () => set({ role: null, userName: '', restaurantId: undefined }),
+            isDemo: false,
+            setRole: (role, name, restaurantId) => set({ role, userName: name || defaultNames[role], restaurantId, isDemo: false }),
+            setDemo: (role) => set({ 
+                role, 
+                userName: `Demo ${role.charAt(0).toUpperCase() + role.slice(1)}`, 
+                restaurantId: 'demo-restro-id', 
+                isDemo: true 
+            }),
+            logout: () => {
+                // Clear demo cookie if it exists
+                document.cookie = "myrestro_demo_session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                set({ role: null, userName: '', restaurantId: undefined, isDemo: false });
+            },
         }),
         { name: 'restaurant-role' }
     )

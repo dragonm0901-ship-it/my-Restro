@@ -100,7 +100,12 @@ export default function Sidebar() {
             ...g,
             children: g.children.filter(c => !c.isPremium || hasPremium)
         };
-    }).filter((g) => !role || g.roles.includes(role));
+    }).filter((g) => {
+        if (!role) return true; // Show all if no role (loading)
+        // Admin/Owner can see everything. Others are filtered.
+        if (role === 'owner' || role === 'admin') return true;
+        return g.roles.includes(role);
+    });
 
     const toggleGroup = (label: string) => {
         setOpenGroups((prev) => ({ ...prev, [label]: !prev[label] }));
@@ -112,12 +117,17 @@ export default function Sidebar() {
     };
 
     const handleSignOut = async () => {
-        const { createClient } = await import('@/lib/supabase');
-        const supabase = createClient();
-        await supabase.auth.signOut();
-        logout();
-        toast.success('Signed out');
-        router.push('/login');
+        try {
+            const { createClient } = await import('@/lib/supabase');
+            const supabase = createClient();
+            await supabase.auth.signOut();
+        } catch (err) {
+            console.warn("Sign out handling:", err);
+        } finally {
+            logout();
+            toast.success('Signed out');
+            router.push('/login');
+        }
     };
 
     const sidebarWidth = collapsed ? 60 : 230;

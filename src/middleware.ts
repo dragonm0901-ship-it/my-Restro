@@ -62,6 +62,16 @@ export async function middleware(request: NextRequest) {
 
     const url = request.nextUrl.clone();
     
+    // --- GHOST DEMO BYPASS ---
+    const isDemoSession = request.cookies.get('myrestro_demo_session')?.value === 'true';
+    if (isDemoSession) {
+        // If it's a demo session, we skip all Supabase Auth checks and allow access to UI routes
+        // We only block API routes that explicitly need a user ID for non-demo purposes
+        if (!url.pathname.startsWith('/api') || url.pathname.startsWith('/api/payments')) {
+            return supabaseResponse;
+        }
+    }
+    
     // Protect API routes except payments (since payments use S2S webhooks without user sessions)
     if (url.pathname.startsWith('/api') && !url.pathname.startsWith('/api/payments')) {
         if (!user) {
@@ -69,57 +79,50 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Role-based protection for sensitive UI Routes
-    if (url.pathname.startsWith('/settings') || url.pathname.startsWith('/dashboard')) {
-        if (!user) {
-            url.pathname = '/login';
-            return NextResponse.redirect(url);
-        }
-
-        // Fetch user profile to get their role server-side
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .maybeSingle();
-
-        let role = profile?.role;
-        const isDemoOwner = user.email === 'demo.owner@example.com';
-        const isDemoChef = user.email === 'demo.chef@example.com';
-        const isDemoWaiter = user.email === 'demo.waiter@example.com';
-
-        if (!role) {
-            if (isDemoOwner) role = 'owner';
-            else if (isDemoChef) role = 'chef';
-            else if (isDemoWaiter) role = 'waiter';
-        }
-        
-        // Only admins, owners, and managers can access settings. Waiters can access profile but not floorplan/billing
-        if (url.pathname.startsWith('/settings')) {
-            const isSettingsAdminRoute = url.pathname.startsWith('/settings/floorplan') || url.pathname.startsWith('/settings/billing');
-            
-            if (isSettingsAdminRoute && !['admin', 'owner', 'manager'].includes(role || '')) {
-                url.pathname = (role === 'kitchen' || role === 'chef' || isDemoChef) ? '/kds' : '/tables';
+    // 3. UI Route Protection
+    try {
+        if (url.pathname.startsWith('/settings') || url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/kds')) {
+            if (!user) {
+                url.pathname = '/login';
                 return NextResponse.redirect(url);
             }
-        }
-    }
 
-    // Kitchen specific route
-    if (url.pathname.startsWith('/kds')) {
-         if (!user) {
-            url.pathname = '/login';
-            return NextResponse.redirect(url);
-        }
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .maybeSingle();
 
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-        const role = profile?.role;
-        const isDemoChef = user.email === 'demo.chef@example.com';
-        
-        if (!isDemoChef && role !== 'admin' && role !== 'owner' && role !== 'kitchen' && role !== 'chef') {
-            url.pathname = '/tables';
-            return NextResponse.redirect(url);
+            let role = profile?.role;
+            const isDemoOwner = user.email === 'demo.owner@example.com';
+            const isDemoChef = user.email === 'demo.chef@example.com';
+            const isDemoWaiter = user.email === 'demo.waiter@example.com';
+
+            if (!role) {
+                if (isDemoOwner) role = 'owner';
+                else if (isDemoChef) role = 'chef';
+                else if (isDemoWaiter) role = 'waiter';
+            }
+
+            // Settings Protection
+            if (url.pathname.startsWith('/settings')) {
+                const isSettingsAdminRoute = url.pathname.startsWith('/settings/floorplan') || url.pathname.startsWith('/settings/billing');
+                if (isSettingsAdminRoute && !['admin', 'owner', 'manager'].includes(role || '')) {
+                    url.pathname = (role === 'kitchen' || role === 'chef' || isDemoChef) ? '/kds' : '/tables';
+                    return NextResponse.redirect(url);
+                }
+            }
+
+            // KDS Protection
+            if (url.pathname.startsWith('/kds')) {
+                if (!isDemoChef && !['admin', 'owner', 'kitchen', 'chef'].includes(role || '')) {
+                    url.pathname = '/tables';
+                    return NextResponse.redirect(url);
+                }
+            }
         }
+    } catch (err) {
+        console.error("Middleware processing error:", err);
     }
 
     return supabaseResponse;

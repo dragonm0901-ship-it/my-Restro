@@ -18,6 +18,24 @@ export interface SubscriptionStatus {
 }
 
 export async function getRestaurantSubscription(restaurantId: string): Promise<SubscriptionStatus | null> {
+    // GHOST DEMO BYPASS
+    if (restaurantId === 'demo-restro-id') {
+        return {
+            isActive: true,
+            isTrial: false,
+            status: 'active',
+            endDate: new Date(Date.now() + 30 * 86400000), // 30 days later
+            planName: 'Pro Demo',
+            limits: {
+                maxStaff: 50,
+                maxMenuItems: 500,
+                hasAds: false,
+                hasPrioritySupport: true,
+                hasRealtimeKds: true,
+            }
+        };
+    }
+
     const supabase = createClient();
 
     try {

@@ -45,6 +45,11 @@ export default function KitchenPage() {
     const { isOnline } = useRealtimeOrders(); // Mount WebSockets listener
     const { orders, updateOrderStatus, removeOrder } = useOrdersStore();
     const [filter, setFilter] = useState<'all' | KitchenOrder['status']>('all');
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const filteredOrders = filter === 'all' ? orders : orders.filter((o) => o.status === filter);
     const activeOrders = orders.filter((o) => o.status !== 'completed');
@@ -75,7 +80,7 @@ export default function KitchenPage() {
 
     return (
         <div className="space-y-6 page-enter pb-8">
-            {!isOnline && (
+            {mounted && !isOnline && (
                 <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl flex items-center gap-3 mb-4">
                     <AlertCircle className="w-5 h-5" weight="fill" />
                     <div>

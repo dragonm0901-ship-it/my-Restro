@@ -128,14 +128,14 @@ export default function CustomerMenuPage() {
                                                     Rs. {item.price}
                                                 </span>
                                                 <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                                                    {item.id === 'momo-steam-buff' && (
+                                                    {item.ar_model_url && (
                                                         <button 
                                                             onClick={() => setArItem(item)}
                                                             className="flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full font-bold shadow-sm active:scale-95 transition-transform"
                                                             style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)' }}
                                                         >
                                                             <CubeFocus className="w-3 h-3" weight="fill" />
-                                                            View in AR <span className="opacity-70 font-normal">(Demo)</span>
+                                                            View in AR
                                                         </button>
                                                     )}
                                                     {item.sizes && (
@@ -173,10 +173,16 @@ export default function CustomerMenuPage() {
                 <ARViewer 
                     isOpen={!!arItem}
                     onClose={() => setArItem(null)}
-                    modelSrc="/pizza.glb"
+                    modelSrc={arItem.ar_model_url || '/pizza.glb'}
+                    iosSrc={arItem.ar_model_ios}
                     itemName={arItem.name}
                     itemPrice={arItem.price}
                     itemDescription={arItem.description}
+                    calories={arItem.calories}
+                    prepTime={arItem.prep_time_minutes}
+                    spiceLevels={arItem.spice_levels}
+                    allergens={arItem.allergens}
+                    isVegetarian={arItem.is_vegetarian}
                 />
             )}
         </div>

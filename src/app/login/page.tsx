@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { useRoleStore, UserRole } from '@/stores/useRoleStore';
+import { seedDemoData } from '@/lib/demoSeeder';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -338,69 +339,24 @@ export default function LoginPage() {
                                     onClick={async () => {
                                         setLoading(true);
                                         try {
-                                            const email = `demo.${r}@example.com`;
-                                            const password = 'Password123!';
-                                            let { error, data } = await supabase.auth.signInWithPassword({ email, password });
+                                            const role = r as UserRole;
 
-                                            if (error && error.message.includes('Invalid login credentials')) {
-                                                const { error: signUpError } = await supabase.auth.signUp({
-                                                    email, password, options: { data: { full_name: `Demo ${r.charAt(0).toUpperCase() + r.slice(1)}` } }
-                                                });
-                                                if (signUpError) throw signUpError;
+                                            // 1. Set the Ghost Demo Cookie (Middleware Bypass)
+                                            document.cookie = "myrestro_demo_session=true; path=/; max-age=86400;";
 
-                                                if (r === 'owner') {
-                                                    await supabase.rpc('create_restaurant_and_link', { restaurant_name: 'Demo Restaurant' });
-                                                } else {
-                                                    // For demo chef/waiter, try to link them to an existing demo restaurant
-                                                    const { data: demoRestro } = await supabase.from('restaurants').select('id').ilike('name', 'Demo Restaurant').limit(1).maybeSingle();
-                                                    if (demoRestro) {
-                                                        const dbRole = r === 'chef' ? 'kitchen' : (r === 'waiter' ? 'staff' : 'admin');
-                                                        await supabase.from('profiles').insert({
-                                                            id: signUpError ? undefined : (await supabase.auth.getUser()).data.user?.id,
-                                                            restaurant_id: demoRestro.id,
-                                                            role: dbRole,
-                                                            full_name: `Demo ${r}`
-                                                        });
-                                                    }
-                                                }
-                                                const retry = await supabase.auth.signInWithPassword({ email, password });
-                                                error = retry.error;
-                                                data = retry.data;
-                                            }
-                                            if (error) throw error;
+                                            // 2. Set the Local Role Store
+                                            useRoleStore.getState().setDemo(role);
 
-                                            let { data: profile } = await supabase
-                                                .from('profiles')
-                                                .select('restaurant_id, role')
-                                                .eq('id', data.user?.id)
-                                                .maybeSingle();
+                                            // 3. Seed initial data for demo
+                                            seedDemoData();
 
-                                            // Auto-repair demo profiles if the postgres trigger gave them 'admin' or null restaurant_id
-                                            const expectedDbRole = r === 'chef' ? 'kitchen' : (r === 'waiter' ? 'staff' : 'admin');
-                                            if ((!profile || profile.role !== expectedDbRole || !profile.restaurant_id) && r !== 'owner') {
-                                                const { data: demoRestro } = await supabase.from('restaurants').select('id').ilike('name', 'Demo Restaurant').limit(1).maybeSingle();
-                                                if (demoRestro) {
-                                                    const { error: updateErr } = await supabase.from('profiles').update({
-                                                        restaurant_id: demoRestro.id,
-                                                        role: expectedDbRole,
-                                                        full_name: `Demo ${r}`
-                                                    }).eq('id', data.user?.id);
-                                                    
-                                                    if (updateErr) console.error("Profile update failed:", updateErr);
-                                                    
-                                                    const { data: newProfile } = await supabase.from('profiles').select('restaurant_id, role').eq('id', data.user?.id).maybeSingle();
-                                                    profile = newProfile;
-                                                }
-                                            }
+                                            toast.success(`Welcome to ${role.charAt(0).toUpperCase() + role.slice(1)} Demo!`);
 
-                                            setRole(r, data.user?.user_metadata?.full_name, profile?.restaurant_id);
-                                            toast.success(`Logged in as Demo ${r}`);
-
-                                            if (r === 'chef') router.push('/kds');
-                                            else if (r === 'waiter') router.push('/tables');
-                                            else router.push('/dashboard');
+                                            // 3. Redirect
+                                            router.push(role === 'chef' || role === 'kitchen' ? '/kds' : '/dashboard');
                                         } catch (err) {
-                                            toast.error(err instanceof Error ? err.message : 'Demo setup failed');
+                                            console.error("Ghost Demo failed:", err);
+                                            toast.error('Demo access failed');
                                         } finally {
                                             setLoading(false);
                                         }

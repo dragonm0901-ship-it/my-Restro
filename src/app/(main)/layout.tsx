@@ -28,10 +28,17 @@ export default function MainLayout({
     }, [theme]);
 
     useEffect(() => {
-        if (restaurantId) {
-            fetchSubscription(restaurantId);
-            syncDown();
-        }
+        const init = async () => {
+            try {
+                if (restaurantId) {
+                    await fetchSubscription(restaurantId);
+                    await syncDown();
+                }
+            } catch (err) {
+                console.error("Layout initialization failed:", err);
+            }
+        };
+        init();
     }, [restaurantId, fetchSubscription, syncDown]);
 
     return (

@@ -28,7 +28,7 @@ function BarChart({ data, height = 200 }: { data: { label: string; value: number
     const gap = (w - (data.length * barW)) / (data.length > 1 ? data.length - 1 : 1);
 
     return (
-        <div className="w-full relative mt-4" style={{ height }}>
+        <div className="w-full relative mt-4 mb-8" style={{ height }}>
             <svg width="100%" height="100%" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="overflow-visible">
                 {data.map((d, i) => {
                     const barH = (d.value / max) * chartH;
@@ -79,10 +79,23 @@ function BarChart({ data, height = 200 }: { data: { label: string; value: number
                     </AnimatePresence>
                 );
             })}
-            <div className="flex justify-between mt-4 px-2">
-                {data.map((d, i) => (
-                    <span key={i} className="text-[13px] font-semibold" style={{ color: hoveredIdx === i ? 'var(--text-primary)' : 'var(--text-muted)' }}>{d.label}</span>
-                ))}
+            
+            {/* Perfectly Aligned Labels */}
+            <div className="absolute top-full left-0 w-full mt-3 h-5">
+                {data.map((d, i) => {
+                    const xCenterPct = ((i * (barW + gap) + barW / 2) / w) * 100;
+                    return (
+                        <span 
+                            key={i} 
+                            className="absolute -translate-x-1/2 text-[13px] font-semibold text-center w-12" 
+                            style={{ 
+                                left: `${xCenterPct}%`,
+                                color: hoveredIdx === i ? 'var(--text-primary)' : 'var(--text-muted)' 
+                            }}>
+                            {d.label}
+                        </span>
+                    );
+                })}
             </div>
         </div>
     );
@@ -201,7 +214,7 @@ export default function DashboardPage() {
                             // eslint-disable-next-line react-hooks/purity
                             const m = Math.floor((Date.now() - new Date(order.createdAt).getTime()) / 60000);
                             const timeStr = m < 1 ? 'Just now' : `${m}m ago`;
-                            const items = order.items.slice(0, 2).map((i: { quantity: number; menu_item: { name: string } }) => `${i.quantity}x ${i.menu_item.name}`).join(', ') + (order.items.length > 2 ? '...' : '');
+                            const items = order.items.slice(0, 2).map((i: any) => `${i.quantity}x ${i.menu_item?.name || i.name || 'Item'}`).join(', ') + (order.items.length > 2 ? '...' : '');
 
                             return (
                                 <div key={order.id} className="relative pl-8">

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useNetworkState } from 'react-use';
 import { localDb } from '@/lib/db/localDb';
 import { createClient } from '@/lib/supabase';
@@ -7,8 +7,9 @@ import { useRoleStore } from '@/stores/useRoleStore';
 export function useSync() {
   const { online } = useNetworkState();
   const [isSyncing, setIsSyncing] = useState(false);
+  const syncingRef = useRef(false);
   const [pendingCount, setPendingCount] = useState(0);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const restaurantId = useRoleStore((state) => state.restaurantId);
 
   // 1. Initial Pull: Download categories and menu items to IndexedDB
@@ -52,8 +53,9 @@ export function useSync() {
 
   // 2. Sync Up: Push offline orders to Supabase
   const syncUp = useCallback(async () => {
-    if (!online || isSyncing) return;
+    if (!online || syncingRef.current) return;
     
+    syncingRef.current = true;
     setIsSyncing(true);
     try {
       // Get all pending orders
@@ -64,6 +66,7 @@ export function useSync() {
 
       if (pendingOrders.length === 0) {
         setPendingCount(0);
+        syncingRef.current = false;
         setIsSyncing(false);
         return;
       }
@@ -144,9 +147,10 @@ export function useSync() {
       // Update pending count
       const remaining = await localDb.sync_queue.where('sync_status').equals('pending').count();
       setPendingCount(remaining);
+      syncingRef.current = false;
       setIsSyncing(false);
     }
-  }, [online, isSyncing, supabase, restaurantId]);
+  }, [online, supabase, restaurantId]);
 
 
   // Auto-trigger syncUp when connection is restored
@@ -155,7 +159,8 @@ export function useSync() {
       syncDown();
       syncUp();
     }
-  }, [online, syncDown, syncUp]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [online]); // Only run when online status actively flips
 
   // Hook to manually add an order to the queue (called from checkout)
   const enqueueOrder = async (orderData: Omit<import('@/lib/db/localDb').SyncQueueOrder, 'sync_status' | 'created_at'>) => {

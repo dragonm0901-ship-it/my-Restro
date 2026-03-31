@@ -4,12 +4,14 @@ import { useState, useRef, useEffect } from 'react';
 import { QrCode, Link as LinkIcon, DownloadSimple, Palette, Eye, Hash, PaintBrush } from '@phosphor-icons/react/dist/ssr';
 import { QRCodeCanvas } from 'qrcode.react';
 import toast from 'react-hot-toast';
+import { useRoleStore } from '@/stores/useRoleStore';
 
 export default function QRMenuBuilderPage() {
     const [activeTab, setActiveTab] = useState<'design' | 'preview'>('design');
     const [primaryColor, setPrimaryColor] = useState('#09090B');
     const [tableNumber, setTableNumber] = useState('12');
     const [baseUrl, setBaseUrl] = useState('');
+    const { restaurantId } = useRoleStore();
     
     // We use a ref to target the canvas for downloading
     const qrRef = useRef<HTMLDivElement>(null);
@@ -23,7 +25,7 @@ export default function QRMenuBuilderPage() {
     }, []);
 
     // The dynamic URL this QR code points to
-    const targetUrl = `${baseUrl}/customer-menu?table=${tableNumber || '1'}`;
+    const targetUrl = `${baseUrl}/${restaurantId || 'demo-restro-id'}/menu?table=${tableNumber || '1'}`;
 
     const handleCopyLink = async () => {
         try {

@@ -21,6 +21,13 @@ export interface MenuItem {
     spice_levels?: string[];
     is_available: boolean;
     created_at?: string;
+    // AR & Rich Detail fields
+    ar_model_url?: string;
+    ar_model_ios?: string;
+    calories?: number;
+    prep_time_minutes?: number;
+    allergens?: string[];
+    is_vegetarian?: boolean;
 }
 
 export interface CartItem {

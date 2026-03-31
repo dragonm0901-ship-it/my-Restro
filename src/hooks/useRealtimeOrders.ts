@@ -12,7 +12,7 @@ type OrderItemJoin = {
     menu_item_id: string;
     menu_item: {
         name: string;
-        image: string;
+        image_url: string;
     } | null;
 };
 
@@ -49,7 +49,7 @@ export function useRealtimeOrders() {
                         menu_item_id,
                         menu_item:menu_items (
                             name,
-                            image
+                            image_url
                         )
                     )
                 `)
@@ -65,7 +65,7 @@ export function useRealtimeOrders() {
                         menu_item: {
                             id: oi.menu_item_id,
                             name: oi.menu_item?.name || 'Unknown',
-                            image_url: oi.menu_item?.image || '',
+                            image_url: oi.menu_item?.image_url || '',
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         } as any, // Only UI-required fields mapped for kitchen view
                         quantity: oi.quantity,
@@ -108,7 +108,7 @@ export function useRealtimeOrders() {
                                     quantity,
                                     notes,
                                     menu_item_id,
-                                    menu_item:menu_items (name, image)
+                                    menu_item:menu_items (name, image_url)
                                 )
                             `)
                             .eq('id', dbOrder.id)
@@ -122,7 +122,7 @@ export function useRealtimeOrders() {
                                     menu_item: {
                                         id: oi.menu_item_id,
                                         name: oi.menu_item?.name || 'Unknown',
-                                        image_url: oi.menu_item?.image || '',
+                                        image_url: oi.menu_item?.image_url || '',
                                     },
                                     quantity: oi.quantity,
                                 }),

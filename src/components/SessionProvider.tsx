@@ -16,6 +16,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
             const { data: { session } } = await supabase.auth.getSession();
 
             if (!session) {
+                // --- GHOST DEMO BYPASS ---
+                const isDemoCookie = document.cookie.includes('myrestro_demo_session=true');
+                if (useRoleStore.getState().isDemo || isDemoCookie) {
+                    return; // Skip redirection, let Ghost Demo user browse freely
+                }
+
                 const publicPaths = [
                     '/', '/login', '/customer-menu',
                     '/about', '/blog', '/careers', '/contact',

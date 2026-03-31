@@ -38,6 +38,11 @@ CREATE TABLE IF NOT EXISTS profiles (
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
+  -- Auto-confirm demo users to bypass email confirmation requirements
+  IF (NEW.email LIKE '%@myrestro.com') THEN
+    UPDATE auth.users SET email_confirmed_at = NOW(), confirmed_at = NOW() WHERE id = NEW.id;
+  END IF;
+
   INSERT INTO public.profiles (id, email, full_name, role, restaurant_id)
   VALUES (
     NEW.id,

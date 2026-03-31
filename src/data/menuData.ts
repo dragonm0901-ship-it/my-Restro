@@ -25,6 +25,11 @@ export const menuItems: MenuItem[] = [
         variations: ['Steamed', 'Fried', 'C-Momo', 'Jhol'],
         spice_levels: ['Mild', 'Medium', 'Hot', 'Extra Hot'],
         is_available: true,
+        ar_model_url: '/pizza.glb',
+        calories: 450,
+        prep_time_minutes: 15,
+        allergens: ['Gluten'],
+        is_vegetarian: false,
     },
     {
         id: 'momo-chicken',
@@ -37,6 +42,11 @@ export const menuItems: MenuItem[] = [
         variations: ['Steamed', 'Fried', 'C-Momo', 'Jhol'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        ar_model_url: '/pizza.glb',
+        calories: 380,
+        prep_time_minutes: 15,
+        allergens: ['Gluten'],
+        is_vegetarian: false,
     },
     {
         id: 'momo-jhol',
@@ -49,6 +59,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Chicken', 'Buff'],
         spice_levels: ['Medium', 'Hot', 'Extra Hot'],
         is_available: true,
+        calories: 520,
+        prep_time_minutes: 18,
+        allergens: ['Gluten', 'Sesame'],
+        is_vegetarian: false,
     },
     {
         id: 'momo-c',
@@ -61,6 +75,11 @@ export const menuItems: MenuItem[] = [
         variations: ['Chicken', 'Buff', 'Paneer'],
         spice_levels: ['Hot', 'Extra Hot'],
         is_available: true,
+        ar_model_url: '/pizza.glb',
+        calories: 580,
+        prep_time_minutes: 20,
+        allergens: ['Gluten', 'Soy'],
+        is_vegetarian: false,
     },
     {
         id: 'momo-kothey',
@@ -73,6 +92,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Chicken', 'Buff', 'Veg'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        calories: 420,
+        prep_time_minutes: 18,
+        allergens: ['Gluten'],
+        is_vegetarian: false,
     },
 
     // === DAL BHAT ===
@@ -87,6 +110,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Veg'],
         spice_levels: ['Mild', 'Medium'],
         is_available: true,
+        calories: 680,
+        prep_time_minutes: 12,
+        allergens: [],
+        is_vegetarian: true,
     },
     {
         id: 'dal-bhat-chicken',
@@ -99,6 +126,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Chicken', 'Mutton'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        calories: 850,
+        prep_time_minutes: 15,
+        allergens: [],
+        is_vegetarian: false,
     },
     {
         id: 'dal-bhat-mutton',
@@ -111,6 +142,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Mutton'],
         spice_levels: ['Medium', 'Hot'],
         is_available: true,
+        calories: 920,
+        prep_time_minutes: 20,
+        allergens: [],
+        is_vegetarian: false,
     },
     {
         id: 'newari-set',
@@ -123,6 +158,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Buff Choyla', 'Chicken Choyla'],
         spice_levels: ['Medium', 'Hot'],
         is_available: true,
+        calories: 750,
+        prep_time_minutes: 18,
+        allergens: ['Egg'],
+        is_vegetarian: false,
     },
 
     // === CHOWMEIN ===
@@ -136,6 +175,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular', 'Large'],
         spice_levels: ['Mild', 'Medium'],
         is_available: true,
+        calories: 420,
+        prep_time_minutes: 10,
+        allergens: ['Gluten', 'Soy'],
+        is_vegetarian: true,
     },
     {
         id: 'chowmein-chicken',
@@ -147,6 +190,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular', 'Large'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        calories: 520,
+        prep_time_minutes: 12,
+        allergens: ['Gluten', 'Soy'],
+        is_vegetarian: false,
     },
     {
         id: 'chowmein-buff',
@@ -158,6 +205,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular', 'Large'],
         spice_levels: ['Medium', 'Hot'],
         is_available: true,
+        calories: 560,
+        prep_time_minutes: 12,
+        allergens: ['Gluten', 'Soy'],
+        is_vegetarian: false,
     },
 
     // === SOUPS & THUKPA ===
@@ -171,6 +222,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular', 'Large'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        calories: 380,
+        prep_time_minutes: 15,
+        allergens: ['Gluten'],
+        is_vegetarian: false,
     },
     {
         id: 'wonton-soup',
@@ -182,6 +237,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular'],
         spice_levels: ['Mild', 'Medium'],
         is_available: true,
+        calories: 280,
+        prep_time_minutes: 12,
+        allergens: ['Gluten', 'Sesame'],
+        is_vegetarian: false,
     },
 
     // === GRILLED & SEKUWA ===
@@ -196,6 +255,11 @@ export const menuItems: MenuItem[] = [
         variations: ['Chicken', 'Mutton', 'Buff'],
         spice_levels: ['Medium', 'Hot'],
         is_available: true,
+        ar_model_url: '/pizza.glb',
+        calories: 620,
+        prep_time_minutes: 25,
+        allergens: [],
+        is_vegetarian: false,
     },
     {
         id: 'sausage',
@@ -208,6 +272,10 @@ export const menuItems: MenuItem[] = [
         variations: ['Pork', 'Buff'],
         spice_levels: ['Medium', 'Hot'],
         is_available: true,
+        calories: 480,
+        prep_time_minutes: 20,
+        allergens: [],
+        is_vegetarian: false,
     },
 
     // === SIDES & SNACKS ===
@@ -220,6 +288,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=600&q=80',
         sizes: ['2 pcs', '4 pcs'],
         is_available: true,
+        calories: 260,
+        prep_time_minutes: 8,
+        allergens: ['Gluten'],
+        is_vegetarian: true,
     },
     {
         id: 'aloo-sadeko',
@@ -231,6 +303,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular'],
         spice_levels: ['Mild', 'Medium', 'Hot'],
         is_available: true,
+        calories: 180,
+        prep_time_minutes: 10,
+        allergens: [],
+        is_vegetarian: true,
     },
     {
         id: 'puri-tarkari',
@@ -241,6 +317,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80',
         sizes: ['2 pcs', '4 pcs'],
         is_available: true,
+        calories: 350,
+        prep_time_minutes: 10,
+        allergens: ['Gluten'],
+        is_vegetarian: true,
     },
 
     // === DRINKS ===
@@ -253,6 +333,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80',
         sizes: ['Cup', 'Glass'],
         is_available: true,
+        calories: 90,
+        prep_time_minutes: 5,
+        allergens: ['Dairy'],
+        is_vegetarian: true,
     },
     {
         id: 'lassi',
@@ -264,6 +348,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular', 'Large'],
         variations: ['Sweet', 'Mango', 'Salty'],
         is_available: true,
+        calories: 160,
+        prep_time_minutes: 3,
+        allergens: ['Dairy'],
+        is_vegetarian: true,
     },
     {
         id: 'lemon-soda',
@@ -275,6 +363,10 @@ export const menuItems: MenuItem[] = [
         sizes: ['Regular'],
         variations: ['Sweet', 'Salty', 'Mixed'],
         is_available: true,
+        calories: 70,
+        prep_time_minutes: 3,
+        allergens: [],
+        is_vegetarian: true,
     },
 
     // === DESSERTS ===
@@ -287,6 +379,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80',
         sizes: ['2 pcs', '4 pcs'],
         is_available: true,
+        calories: 220,
+        prep_time_minutes: 8,
+        allergens: [],
+        is_vegetarian: true,
     },
     {
         id: 'juju-dhau',
@@ -297,6 +393,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80',
         sizes: ['Small', 'Large'],
         is_available: true,
+        calories: 180,
+        prep_time_minutes: 0,
+        allergens: ['Dairy'],
+        is_vegetarian: true,
     },
     {
         id: 'kheer',
@@ -307,6 +407,10 @@ export const menuItems: MenuItem[] = [
         image_url: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=600&q=80',
         sizes: ['Regular'],
         is_available: true,
+        calories: 280,
+        prep_time_minutes: 5,
+        allergens: ['Dairy', 'Nuts'],
+        is_vegetarian: true,
     },
 ];
 
