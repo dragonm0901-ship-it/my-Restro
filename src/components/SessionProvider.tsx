@@ -28,7 +28,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
                     '/help', '/docs', '/api-reference', '/status', '/integrations',
                     '/privacy', '/terms', '/cookies'
                 ];
-                const isPublic = publicPaths.includes(pathname) || pathname.startsWith('/login/');
+                
+                // Allow /login/* and /[restaurantId]/menu (Customer QR Menu)
+                const isCustomerMenu = /^\/[^/]+\/menu$/.test(pathname);
+                const isPublic = publicPaths.includes(pathname) || pathname.startsWith('/login/') || isCustomerMenu;
+                
                 if (!isPublic) {
                     router.push('/login');
                 }
